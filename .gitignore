@@ -1,3 +1,5 @@
 .terraform/
 *.exe
 *.tf
+*.log
+*.tfstate
