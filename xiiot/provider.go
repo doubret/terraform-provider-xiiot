@@ -24,20 +24,20 @@ func providerSchema() map[string]*schema.Schema {
 		"username": &schema.Schema{
 			Type:        schema.TypeString,
 			Required:    true,
-			Description: "Username to login to the XiIoT",
-			DefaultFunc: schema.EnvDefaultFunc("XI_LOGIN", nil),
+			Description: "User to login within the XiIoT REST api",
+			DefaultFunc: schema.EnvDefaultFunc("XI_USER", nil),
 		},
 		"password": &schema.Schema{
 			Type:        schema.TypeString,
 			Required:    true,
-			Description: "Password to login to the XiIoT",
+			Description: "Password to login within the XiIoT REST api",
 			DefaultFunc: schema.EnvDefaultFunc("XI_PASSWORD", nil),
 		},
 		"endpoint": &schema.Schema{
 			Type:        schema.TypeString,
 			Required:    true,
-			Description: "The URL to the XiIoT API",
-			DefaultFunc: schema.EnvDefaultFunc("XI_URL", nil),
+			Description: "The hostname of the XiIoT REST api",
+			DefaultFunc: schema.EnvDefaultFunc("XI_ENDPOINT", "iot.nutanix.com"),
 		},
 	}
 }
