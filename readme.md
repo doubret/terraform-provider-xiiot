@@ -51,7 +51,7 @@ export XI_ENDPOINT=xi.endpoint.com
 
 ### Use terraform as usual
 
-Run `terraform init` once the use `terraform plan`, `terraform apply`, etc... as usual.
+Run `terraform init` once, then use `terraform plan`, `terraform apply`, etc... as usual.
 
 ## Provider configuration
 
