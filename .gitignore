@@ -3,3 +3,4 @@
 *.tf
 *.log
 *.tfstate
+*.backup

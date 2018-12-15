@@ -13,10 +13,10 @@ import (
 func XiIoTCategory() *schema.Resource {
 	return &schema.Resource{
 		SchemaVersion: 1,
-		Create:        create_category,
-		Read:          read_category,
-		Update:        update_category,
-		Delete:        delete_category,
+		Create:        createCategory,
+		Read:          readCategory,
+		Update:        updateCategory,
+		Delete:        deleteCategory,
 		Schema: map[string]*schema.Schema{
 			"xi_id": &schema.Schema{
 				Type:     schema.TypeString,
@@ -53,7 +53,7 @@ func XiIoTCategory() *schema.Resource {
 	}
 }
 
-func get_category(d *schema.ResourceData) *api_models.Category {
+func getCategory(d *schema.ResourceData) *api_models.Category {
 	name := d.Get("name").(string)
 	purpose := d.Get("purpose").(string)
 
@@ -67,7 +67,7 @@ func get_category(d *schema.ResourceData) *api_models.Category {
 	return &resource
 }
 
-func set_category(d *schema.ResourceData, resource *api_models.Category) {
+func setCategory(d *schema.ResourceData, resource *api_models.Category) {
 	d.Set("xi_id", resource.ID)
 	d.Set("name", resource.Name)
 	d.Set("purpose", resource.Purpose)
@@ -75,15 +75,15 @@ func set_category(d *schema.ResourceData, resource *api_models.Category) {
 	d.SetId(resource.ID)
 }
 
-func create_category(d *schema.ResourceData, meta interface{}) error {
-	log.Printf("[DEBUG] xiiot-provider: In create_category")
+func createCategory(d *schema.ResourceData, meta interface{}) error {
+	log.Printf("[DEBUG] xiiot-provider: In createCategory")
 
-	read := read_category(d, meta)
+	read := readCategory(d, meta)
 
 	if read != nil {
 		config := meta.(configuration.Configuration)
 
-		tfResource := get_category(d)
+		tfResource := getCategory(d)
 		_, err := config.Client.Operations.CategoryCreate(api_operations.NewCategoryCreateParams().WithBody(tfResource), config.Auth)
 
 		if err != nil {
@@ -92,16 +92,16 @@ func create_category(d *schema.ResourceData, meta interface{}) error {
 			return err
 		}
 
-		// TODO : should read back
+		// TODO : should read back ?
 
-		set_category(d, tfResource)
+		setCategory(d, tfResource)
 	}
 
 	return nil
 }
 
-func read_category(d *schema.ResourceData, meta interface{}) error {
-	log.Printf("[DEBUG] xiiot-provider: In read_category")
+func readCategory(d *schema.ResourceData, meta interface{}) error {
+	log.Printf("[DEBUG] xiiot-provider: In readCategory")
 
 	id := d.Id()
 
@@ -122,18 +122,18 @@ func read_category(d *schema.ResourceData, meta interface{}) error {
 			return err
 		}
 
-		set_category(d, xiResource.Payload)
+		setCategory(d, xiResource.Payload)
 	}
 
 	return nil
 }
 
-func update_category(d *schema.ResourceData, meta interface{}) error {
-	log.Printf("[DEBUG] xiiot-provider: In update_category")
+func updateCategory(d *schema.ResourceData, meta interface{}) error {
+	log.Printf("[DEBUG] xiiot-provider: In updateCategory")
 
 	config := meta.(configuration.Configuration)
 
-	tfResource := get_category(d)
+	tfResource := getCategory(d)
 	_, err := config.Client.Operations.CategoryCreate(api_operations.NewCategoryCreateParams().WithBody(tfResource), config.Auth)
 
 	if err != nil {
@@ -142,13 +142,13 @@ func update_category(d *schema.ResourceData, meta interface{}) error {
 		return err
 	}
 
-	set_category(d, tfResource)
+	setCategory(d, tfResource)
 
 	return nil
 }
 
-func delete_category(d *schema.ResourceData, meta interface{}) error {
-	log.Printf("[DEBUG] xiiot-provider: In delete_category")
+func deleteCategory(d *schema.ResourceData, meta interface{}) error {
+	log.Printf("[DEBUG] xiiot-provider: In deleteCategory")
 
 	id := d.Id()
 
