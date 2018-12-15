@@ -22,20 +22,22 @@ func XiIoTCategory() *schema.Resource {
 		Update:        update_category,
 		Delete:        delete_category,
 		Schema: map[string]*schema.Schema{
-			"id": &schema.Schema{
-				Type:     schema.TypeString,
-				Optional: true,
-				Computed: true,
-				ForceNew: false,
-			},
+			// "id": &schema.Schema{
+			// 	Type:     schema.TypeString,
+			// 	Optional: true,
+			// 	Computed: true,
+			// 	ForceNew: false,
+			// },
 			"name": &schema.Schema{
 				Type:     schema.TypeString,
+				Required: true,
 				Optional: false,
 				Computed: false,
 				ForceNew: false,
 			},
 			"purpose": &schema.Schema{
 				Type:     schema.TypeString,
+				Required: true,
 				Optional: false,
 				Computed: false,
 				ForceNew: false,
@@ -45,6 +47,7 @@ func XiIoTCategory() *schema.Resource {
 				Elem: &schema.Schema{
 					Type: schema.TypeString,
 				},
+				Required: true,
 				Optional: false,
 				Computed: false,
 				ForceNew: false,

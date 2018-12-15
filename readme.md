@@ -20,8 +20,8 @@ Install terraform as explained [here](https://learn.hashicorp.com/terraform/gett
 
 ### Install terraform-provider-xiiot (on windows)
 
-Create folder `%APPDATA%/terraform.d/plugins/` if it doesn't exist yet.
-Copy `terraform-provider-xiiot.exe` in the `%APPDATA%/terraform.d/plugins/` folder.
+* Create folder `%APPDATA%/terraform.d/plugins/` if it doesn't exist yet.
+* Copy `terraform-provider-xiiot.exe` in the `%APPDATA%/terraform.d/plugins/` folder.
 
 Alternatively, you can simply run `plugin.bat` from this repository.
 
