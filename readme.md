@@ -4,7 +4,8 @@
 
 ## Description
 
-This project is a terraform custom provider for Nutanix Xi IoT. It uses the REST api manage resources.
+This project is a terraform custom provider for Nutanix Xi IoT.
+It uses the Xi IoT REST api to manage resources.
 
 The REST api client is automatically generated using [go-swagger](https://github.com/go-swagger/go-swagger).
 
