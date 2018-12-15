@@ -1,10 +1,17 @@
 package resources
 
 import (
-	"github.com/hashicorp/terraform/helper/schema"
 	"log"
-	"strconv"
-	"strings"
+
+	"github.com/hashicorp/terraform/helper/schema"
+
+	// "strconv"
+	// "strings"
+	"github.com/doubret/terraform-provider-xiiot/xiiot/configuration"
+
+	// api_client "github.com/doubret/terraform-provider-xiiot/xiiot/client/client"
+	api_operations "github.com/doubret/terraform-provider-xiiot/xiiot/client/client/operations"
+	api_models "github.com/doubret/terraform-provider-xiiot/xiiot/client/models"
 )
 
 func XiIoTCategory() *schema.Resource {
@@ -12,121 +19,121 @@ func XiIoTCategory() *schema.Resource {
 		SchemaVersion: 1,
 		Create:        create_category,
 		Read:          read_category,
-		Update:        nil,
+		Update:        update_category,
 		Delete:        delete_category,
 		Schema: map[string]*schema.Schema{
 			"id": &schema.Schema{
 				Type:     schema.TypeString,
 				Optional: true,
 				Computed: true,
-				ForceNew: true,
+				ForceNew: false,
 			},
 			"name": &schema.Schema{
 				Type:     schema.TypeString,
-				Optional: true,
-				Computed: true,
-				ForceNew: true,
+				Optional: false,
+				Computed: false,
+				ForceNew: false,
 			},
 			"purpose": &schema.Schema{
 				Type:     schema.TypeString,
-				Optional: true,
-				Computed: true,
-				ForceNew: true,
+				Optional: false,
+				Computed: false,
+				ForceNew: false,
 			},
 			"values": &schema.Schema{
 				Type: schema.TypeSet,
 				Elem: &schema.Schema{
 					Type: schema.TypeString,
 				},
-				Optional: true,
-				Computed: true,
-				ForceNew: true,
+				Optional: false,
+				Computed: false,
+				ForceNew: false,
 			},
 		},
 	}
 }
 
-func get_category(d *schema.ResourceData) nitro.Category {
-	var _ = utils.Convert_set_to_string_array
+func get_category(d *schema.ResourceData) api_models.Category {
+	// var _ = utils.Convert_set_to_string_array
 
-	resource := nitro.Category{
-		Id:      d.Get("id").(string),
-		Name:    d.Get("name").(string),
-		Purpose: d.Get("purpose").(string),
-		Values:  utils.Convert_set_to_string_array(d.Get("values").(*schema.Set)),
+	resource := api_models.Category{
+		ID:      d.Get("id").(string),
+		Name:    d.Get("name").(*string),
+		Purpose: d.Get("purpose").(*string),
+		// Values:  utils.Convert_set_to_string_array(d.Get("values").(*schema.Set)),
 	}
 
 	return resource
 }
 
-func set_category(d *schema.ResourceData, resource *nitro.Category) {
-	var _ = strconv.Itoa
-	var _ = strconv.FormatBool
+// func set_category(d *schema.ResourceData, resource *nitro.Category) {
+// 	var _ = strconv.Itoa
+// 	var _ = strconv.FormatBool
 
-	d.Set("id", resource.Id)
-	d.Set("name", resource.Name)
-	d.Set("purpose", resource.Purpose)
-	d.Set("values", resource.Values)
+// 	d.Set("id", resource.Id)
+// 	d.Set("name", resource.Name)
+// 	d.Set("purpose", resource.Purpose)
+// 	d.Set("values", resource.Values)
 
-	var key []string
+// 	var key []string
 
-	key = append(key, resource.Id)
-	d.SetId(strings.Join(key, "-"))
-}
+// 	key = append(key, resource.Id)
+// 	d.SetId(strings.Join(key, "-"))
+// }
 
-func get_category_key(d *schema.ResourceData) nitro.CategoryKey {
+// func get_category_key(d *schema.ResourceData) nitro.CategoryKey {
 
-	key := nitro.CategoryKey{
-		d.Get("id").(string),
-	}
-	return key
-}
+// 	key := nitro.CategoryKey{
+// 		d.Get("id").(string),
+// 	}
+// 	return key
+// }
 
 func create_category(d *schema.ResourceData, meta interface{}) error {
 	log.Printf("[DEBUG]  xiiot-provider: In create_category")
 
-	client := meta.(*nitro.NitroClient)
+	config := meta.(*configuration.Configuration)
 
-	resource := get_category(d)
-	key := resource.ToKey()
+	tfResource := get_category(d)
+	xiResource, err := config.Client.Operations.CategoryGet(api_operations.NewCategoryGetParams().WithID(tfResource.ID), config.Auth)
 
-	exists, err := client.ExistsCategory(key)
+	log.Print("xi : ", xiResource)
 
 	if err != nil {
-		log.Print("Failed to check if resource exists : ", err)
+		log.Print("Failed to get xi resource : ", err)
 
 		return err
 	}
 
-	if exists {
-		resource, err := client.GetCategory(key)
+	// if exists {
+	// 	resource, err := client.GetCategory(key)
 
-		if err != nil {
-			log.Print("Failed to get existing resource : ", err)
+	// 	if err != nil {
+	// 		log.Print("Failed to get existing resource : ", err)
 
-			return err
-		}
+	// 		return err
+	// 	}
 
-		set_category(d, resource)
-	} else {
-		err := client.AddCategory(get_category(d))
+	// 	set_category(d, resource)
+	// } else {
+	// 	err := client.AddCategory(get_category(d))
 
-		if err != nil {
-			log.Print("Failed to create resource : ", err)
+	// 	if err != nil {
+	// 		log.Print("Failed to create resource : ", err)
 
-			return err
-		}
+	// 		return err
+	// 	}
 
-		resource, err := client.GetCategory(key)
+	// 	resource, err := client.GetCategory(key)
 
-		if err != nil {
-			log.Print("Failed to get created resource : ", err)
+	// 	if err != nil {
+	// 		log.Print("Failed to get created resource : ", err)
 
-			return err
-		}
+	// 		return err
+	// 	}
 
-		set_category(d, resource)
-	}
+	// 	set_category(d, resource)
+	// }
 
 	return nil
 }
@@ -134,32 +141,38 @@ func create_category(d *schema.ResourceData, meta interface{}) error {
 func read_category(d *schema.ResourceData, meta interface{}) error {
 	log.Println("[DEBUG] xiiot-provider:  In read_category")
 
-	client := meta.(*nitro.NitroClient)
+	// client := meta.(*nitro.NitroClient)
 
-	resource := get_category(d)
-	key := resource.ToKey()
+	// resource := get_category(d)
+	// key := resource.ToKey()
 
-	exists, err := client.ExistsCategory(key)
+	// exists, err := client.ExistsCategory(key)
 
-	if err != nil {
-		log.Print("Failed to check if resource exists : ", err)
+	// if err != nil {
+	// 	log.Print("Failed to check if resource exists : ", err)
 
-		return err
-	}
+	// 	return err
+	// }
 
-	if exists {
-		resource, err := client.GetCategory(key)
+	// if exists {
+	// 	resource, err := client.GetCategory(key)
 
-		if err != nil {
-			log.Print("Failed to get resource : ", err)
+	// 	if err != nil {
+	// 		log.Print("Failed to get resource : ", err)
 
-			return err
-		}
+	// 		return err
+	// 	}
 
-		set_category(d, resource)
-	} else {
-		d.SetId("")
-	}
+	// 	set_category(d, resource)
+	// } else {
+	// 	d.SetId("")
+	// }
+
+	return nil
+}
+
+func update_category(d *schema.ResourceData, meta interface{}) error {
+	log.Printf("[DEBUG]  xiiot-provider: In delete_category")
 
 	return nil
 }
@@ -167,30 +180,30 @@ func read_category(d *schema.ResourceData, meta interface{}) error {
 func delete_category(d *schema.ResourceData, meta interface{}) error {
 	log.Printf("[DEBUG]  xiiot-provider: In delete_category")
 
-	client := meta.(*nitro.NitroClient)
+	// client := meta.(*nitro.NitroClient)
 
-	resource := get_category(d)
-	key := resource.ToKey()
+	// resource := get_category(d)
+	// key := resource.ToKey()
 
-	exists, err := client.ExistsCategory(key)
+	// exists, err := client.ExistsCategory(key)
 
-	if err != nil {
-		log.Print("Failed to check if resource exists : ", err)
+	// if err != nil {
+	// 	log.Print("Failed to check if resource exists : ", err)
 
-		return err
-	}
+	// 	return err
+	// }
 
-	if exists {
-		err := client.DeleteCategory(key)
+	// if exists {
+	// 	err := client.DeleteCategory(key)
 
-		if err != nil {
-			log.Print("Failed to delete resource : ", err)
+	// 	if err != nil {
+	// 		log.Print("Failed to delete resource : ", err)
 
-			return err
-		}
-	}
+	// 		return err
+	// 	}
+	// }
 
-	d.SetId("")
+	// d.SetId("")
 
 	return nil
 }
