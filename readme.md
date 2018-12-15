@@ -74,4 +74,22 @@ The following arguments are supported.
 ## Build from sources
 
 TODO
+* go get list
+* build api client
+* ...
 
+## Resources reference
+
+### Categories
+
+```
+resource "xiiot_category" "category_name" {
+  name = "name"
+  purpose = "purpose"
+  values = [
+    "1",
+    "2",
+    "3"
+  ]
+}
+```
