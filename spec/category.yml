@@ -1,7 +1,0 @@
-key:
-  - id
-fields:
-  id: string
-  name: string
-  purpose: string
-  values: string[]

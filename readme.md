@@ -1,6 +1,6 @@
 # terraform-provider-xiiot
 
-[Terraform](https://www.terraform.io) Provider for [Nutanix Xi IoT](https://www.nutanix.fr/products/iot/)
+[Terraform](https://www.terraform.io) Provider for Nutanix [Xi IoT](https://www.nutanix.fr/products/iot/)
 
 ## Description
 
@@ -53,6 +53,13 @@ export XI_ENDPOINT=xi.endpoint.com
 
 Run `terraform init` once, then use `terraform plan`, `terraform apply`, etc... as usual.
 
+## Build from sources
+
+TODO
+* go get list
+* build api client
+* ...
+
 ## Provider configuration
 
 ```
@@ -70,13 +77,6 @@ The following arguments are supported.
 * `username` - (Required) This is the user name to access the Xi IoT REST api. Can be specified in environment variable `XI_USER`.
 * `password` - (Required) This is the password to access the Xi IoT REST api. Can be specified in environment variable `XI_PASSWORD`.
 * `endpoint` - (Optionnal) Xi IoT REST api endpoint. Can be specified in environment variable `XI_ENDPOINT`, if not specified, default to `iot.nutanix.com`.
-
-## Build from sources
-
-TODO
-* go get list
-* build api client
-* ...
 
 ## Resources reference
 
