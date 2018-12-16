@@ -85,13 +85,9 @@ The following arguments are supported.
 
 ```
 resource "xiiot_category" "category_name" {
-  name = "name"
-  purpose = "purpose"
-  values = [
-    "1",
-    "2",
-    "3"
-  ]
+  name            = "name"
+  purpose         = "purpose"
+  values          = [ "1", "2", "3" ]
 }
 ```
 
@@ -99,9 +95,25 @@ resource "xiiot_category" "category_name" {
 
 ```
 resource "xiiot_user" "user" {
-  email     = "email"
-  name      = "name"
-  password  = "sha-256"
-  role      = "USER"
+  email           = "email"
+  name            = "name"
+  password        = "sha-256"
+  role            = "USER"
+}
+```
+
+### Docker profiles
+
+```
+resource "xiiot_dockerprofile" "dockerprofile" {
+  name            = "name"
+  description     = "description"
+  type            = "type"
+  server          = "server"
+  user_name       = "user_name"
+  email           = "email"
+  pwd             = "pwd"
+  cloud_creds_id  = "cloud_creds_id"
+  credentials     = "credentials"
 }
 ```
