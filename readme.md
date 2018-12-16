@@ -94,3 +94,14 @@ resource "xiiot_category" "category_name" {
   ]
 }
 ```
+
+### Users
+
+```
+resource "xiiot_user" "user" {
+  email     = "email"
+  name      = "name"
+  password  = "sha-256"
+  role      = "USER"
+}
+```
