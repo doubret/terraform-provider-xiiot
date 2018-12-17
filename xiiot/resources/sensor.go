@@ -20,64 +20,49 @@ func XiIoTSensor() *schema.Resource {
 			"edge_id": &schema.Schema{
 				Type:     schema.TypeString,
 				Required: true,
-				Optional: false,
-				Computed: false,
-				ForceNew: false,
 			},
 			"topic_name": &schema.Schema{
 				Type:     schema.TypeString,
 				Required: true,
-				Optional: false,
-				Computed: false,
-				ForceNew: false,
 			},
 		},
 	}
 }
 
 func getSensor(d *schema.ResourceData) *api_models.Sensor {
-	// name := d.Get("name").(string)
-	// purpose := d.Get("purpose").(string)
+	edgeId := d.Get("edge_id").(string)
+	topicName := d.Get("topic_name").(string)
 
 	resource := api_models.Sensor{
-		// ID:      d.Id(),
-		// Name:    &name,
-		// Purpose: &purpose,
-		// Values:  utils.Convert_set_to_string_array(d.Get("values").(*schema.Set)),
+		ID:        d.Id(),
+		EdgeID:    &edgeId,
+		TopicName: &topicName,
 	}
 
 	return &resource
 }
 
 func setSensor(d *schema.ResourceData, resource *api_models.Sensor) {
-	// d.Set("xi_id", resource.ID)
-	// d.Set("name", resource.Name)
-	// d.Set("purpose", resource.Purpose)
-	// d.Set("values", resource.Values)
-	// d.SetId(resource.ID)
+	d.Set("edge_id", resource.EdgeID)
+	d.Set("topic_name", resource.TopicName)
+	d.SetId(resource.ID)
 }
 
 func createSensor(d *schema.ResourceData, meta interface{}) error {
 	log.Printf("[DEBUG] xiiot-provider: In createSensor")
 
-	read := readSensor(d, meta)
+	config := meta.(configuration.Configuration)
 
-	if read != nil {
-		config := meta.(configuration.Configuration)
+	model := getSensor(d)
+	_, err := config.Client.Operations.SensorCreate(api_operations.NewSensorCreateParams().WithBody(model), config.Auth)
 
-		tfResource := getSensor(d)
-		_, err := config.Client.Operations.SensorCreate(api_operations.NewSensorCreateParams().WithBody(tfResource), config.Auth)
+	if err != nil {
+		log.Print("Failed to create resource : ", err)
 
-		if err != nil {
-			log.Print("Failed to create resource : ", err)
-
-			return err
-		}
-
-		// TODO : should read back ?
-
-		setSensor(d, tfResource)
+		return err
 	}
+
+	setSensor(d, model)
 
 	return nil
 }
@@ -87,25 +72,17 @@ func readSensor(d *schema.ResourceData, meta interface{}) error {
 
 	id := d.Id()
 
-	if id == "" {
-		id = d.Get("xi_id").(string)
+	config := meta.(configuration.Configuration)
+
+	model, err := config.Client.Operations.SensorGet(api_operations.NewSensorGetParams().WithID(id), config.Auth)
+
+	if err != nil {
+		log.Print("Failed to get resource : ", err)
+
+		return err
 	}
 
-	if id == "" {
-		d.SetId("")
-	} else {
-		config := meta.(configuration.Configuration)
-
-		xiResource, err := config.Client.Operations.SensorGet(api_operations.NewSensorGetParams().WithID(id), config.Auth)
-
-		if err != nil {
-			log.Print("Failed to get resource : ", err)
-
-			return err
-		}
-
-		setSensor(d, xiResource.Payload)
-	}
+	setSensor(d, model.Payload)
 
 	return nil
 }
@@ -115,16 +92,16 @@ func updateSensor(d *schema.ResourceData, meta interface{}) error {
 
 	config := meta.(configuration.Configuration)
 
-	tfResource := getSensor(d)
-	_, err := config.Client.Operations.SensorCreate(api_operations.NewSensorCreateParams().WithBody(tfResource), config.Auth)
+	model := getSensor(d)
+	_, err := config.Client.Operations.SensorCreate(api_operations.NewSensorCreateParams().WithBody(model), config.Auth)
 
 	if err != nil {
-		log.Print("Failed to create resource : ", err)
+		log.Print("Failed to update resource : ", err)
 
 		return err
 	}
 
-	setSensor(d, tfResource)
+	setSensor(d, model)
 
 	return nil
 }

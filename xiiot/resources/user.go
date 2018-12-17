@@ -17,88 +17,65 @@ func XiIoTUser() *schema.Resource {
 		Update:        updateUser,
 		Delete:        deleteUser,
 		Schema: map[string]*schema.Schema{
-			"xi_id": &schema.Schema{
-				Type:     schema.TypeString,
-				Required: false,
-				Optional: true,
-				Computed: true,
-				ForceNew: false,
-			},
 			"name": &schema.Schema{
 				Type:     schema.TypeString,
 				Required: true,
-				Optional: false,
-				Computed: false,
-				ForceNew: false,
 			},
 			"email": &schema.Schema{
 				Type:     schema.TypeString,
 				Required: true,
-				Optional: false,
-				Computed: false,
-				ForceNew: false,
 			},
 			"password": &schema.Schema{
 				Type:     schema.TypeString,
 				Required: true,
-				Optional: false,
-				Computed: false,
-				ForceNew: false,
 			},
 			"role": &schema.Schema{
 				Type:     schema.TypeString,
 				Required: false,
-				Optional: true,
-				Computed: false,
-				ForceNew: false,
 			},
 		},
 	}
 }
 
 func getUser(d *schema.ResourceData) *api_models.User {
-	// name := d.Get("name").(string)
-	// purpose := d.Get("purpose").(string)
+	name := d.Get("name").(string)
+	email := d.Get("email").(string)
+	password := d.Get("password").(string)
 
 	resource := api_models.User{
-		// ID:      d.Id(),
-		// Name:    &name,
-		// Purpose: &purpose,
-		// Values:  utils.Convert_set_to_string_array(d.Get("values").(*schema.Set)),
+		ID:       d.Id(),
+		Name:     &name,
+		Email:    &email,
+		Password: &password,
+		Role:     d.Get("role").(string),
 	}
 
 	return &resource
 }
 
 func setUser(d *schema.ResourceData, resource *api_models.User) {
-	// d.Set("xi_id", resource.ID)
-	// d.Set("name", resource.Name)
-	// d.Set("purpose", resource.Purpose)
-	// d.Set("values", resource.Values)
-	// d.SetId(resource.ID)
+	d.Set("name", resource.Name)
+	d.Set("email", resource.Email)
+	d.Set("password", resource.Password)
+	d.Set("role", resource.Role)
+	d.SetId(resource.ID)
 }
 
 func createUser(d *schema.ResourceData, meta interface{}) error {
 	log.Printf("[DEBUG] xiiot-provider: In createUser")
 
-	read := readUser(d, meta)
+	config := meta.(configuration.Configuration)
 
-	if read != nil {
-		config := meta.(configuration.Configuration)
+	model := getUser(d)
+	_, err := config.Client.Operations.UserCreate(api_operations.NewUserCreateParams().WithBody(model), config.Auth)
 
-		tfResource := getUser(d)
-		_, err := config.Client.Operations.UserCreate(api_operations.NewUserCreateParams().WithBody(tfResource), config.Auth)
+	if err != nil {
+		log.Print("Failed to create resource : ", err)
 
-		if err != nil {
-			log.Print("Failed to create resource : ", err)
-
-			return err
-		}
-
-		// TODO : should read back ?
-
-		setUser(d, tfResource)
+		return err
 	}
+
+	setUser(d, model)
 
 	return nil
 }
@@ -108,25 +85,17 @@ func readUser(d *schema.ResourceData, meta interface{}) error {
 
 	id := d.Id()
 
-	if id == "" {
-		id = d.Get("xi_id").(string)
+	config := meta.(configuration.Configuration)
+
+	model, err := config.Client.Operations.UserGet(api_operations.NewUserGetParams().WithID(id), config.Auth)
+
+	if err != nil {
+		log.Print("Failed to get resource : ", err)
+
+		return err
 	}
 
-	if id == "" {
-		d.SetId("")
-	} else {
-		config := meta.(configuration.Configuration)
-
-		xiResource, err := config.Client.Operations.UserGet(api_operations.NewUserGetParams().WithID(id), config.Auth)
-
-		if err != nil {
-			log.Print("Failed to get resource : ", err)
-
-			return err
-		}
-
-		setUser(d, xiResource.Payload)
-	}
+	setUser(d, model.Payload)
 
 	return nil
 }
@@ -136,16 +105,16 @@ func updateUser(d *schema.ResourceData, meta interface{}) error {
 
 	config := meta.(configuration.Configuration)
 
-	tfResource := getUser(d)
-	_, err := config.Client.Operations.UserCreate(api_operations.NewUserCreateParams().WithBody(tfResource), config.Auth)
+	model := getUser(d)
+	_, err := config.Client.Operations.UserCreate(api_operations.NewUserCreateParams().WithBody(model), config.Auth)
 
 	if err != nil {
-		log.Print("Failed to create resource : ", err)
+		log.Print("Failed to update resource : ", err)
 
 		return err
 	}
 
-	setUser(d, tfResource)
+	setUser(d, model)
 
 	return nil
 }

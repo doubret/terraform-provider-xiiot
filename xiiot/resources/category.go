@@ -18,26 +18,13 @@ func XiIoTCategory() *schema.Resource {
 		Update:        updateCategory,
 		Delete:        deleteCategory,
 		Schema: map[string]*schema.Schema{
-			"xi_id": &schema.Schema{
-				Type:     schema.TypeString,
-				Required: false,
-				Optional: true,
-				Computed: true,
-				ForceNew: false,
-			},
 			"name": &schema.Schema{
 				Type:     schema.TypeString,
 				Required: true,
-				Optional: false,
-				Computed: false,
-				ForceNew: false,
 			},
 			"purpose": &schema.Schema{
 				Type:     schema.TypeString,
 				Required: true,
-				Optional: false,
-				Computed: false,
-				ForceNew: false,
 			},
 			"values": &schema.Schema{
 				Type: schema.TypeSet,
@@ -45,9 +32,6 @@ func XiIoTCategory() *schema.Resource {
 					Type: schema.TypeString,
 				},
 				Required: true,
-				Optional: false,
-				Computed: false,
-				ForceNew: false,
 			},
 		},
 	}
@@ -68,7 +52,6 @@ func getCategory(d *schema.ResourceData) *api_models.Category {
 }
 
 func setCategory(d *schema.ResourceData, resource *api_models.Category) {
-	d.Set("xi_id", resource.ID)
 	d.Set("name", resource.Name)
 	d.Set("purpose", resource.Purpose)
 	d.Set("values", resource.Values)
@@ -78,24 +61,18 @@ func setCategory(d *schema.ResourceData, resource *api_models.Category) {
 func createCategory(d *schema.ResourceData, meta interface{}) error {
 	log.Printf("[DEBUG] xiiot-provider: In createCategory")
 
-	read := readCategory(d, meta)
+	config := meta.(configuration.Configuration)
 
-	if read != nil {
-		config := meta.(configuration.Configuration)
+	model := getCategory(d)
+	_, err := config.Client.Operations.CategoryCreate(api_operations.NewCategoryCreateParams().WithBody(model), config.Auth)
 
-		tfResource := getCategory(d)
-		_, err := config.Client.Operations.CategoryCreate(api_operations.NewCategoryCreateParams().WithBody(tfResource), config.Auth)
+	if err != nil {
+		log.Print("Failed to create resource : ", err)
 
-		if err != nil {
-			log.Print("Failed to create resource : ", err)
-
-			return err
-		}
-
-		// TODO : should read back ?
-
-		setCategory(d, tfResource)
+		return err
 	}
+
+	setCategory(d, model)
 
 	return nil
 }
@@ -105,25 +82,17 @@ func readCategory(d *schema.ResourceData, meta interface{}) error {
 
 	id := d.Id()
 
-	if id == "" {
-		id = d.Get("xi_id").(string)
+	config := meta.(configuration.Configuration)
+
+	model, err := config.Client.Operations.CategoryGet(api_operations.NewCategoryGetParams().WithID(id), config.Auth)
+
+	if err != nil {
+		log.Print("Failed to read resource : ", err)
+
+		return err
 	}
 
-	if id == "" {
-		d.SetId("")
-	} else {
-		config := meta.(configuration.Configuration)
-
-		xiResource, err := config.Client.Operations.CategoryGet(api_operations.NewCategoryGetParams().WithID(id), config.Auth)
-
-		if err != nil {
-			log.Print("Failed to get resource : ", err)
-
-			return err
-		}
-
-		setCategory(d, xiResource.Payload)
-	}
+	setCategory(d, model.Payload)
 
 	return nil
 }
@@ -133,16 +102,16 @@ func updateCategory(d *schema.ResourceData, meta interface{}) error {
 
 	config := meta.(configuration.Configuration)
 
-	tfResource := getCategory(d)
-	_, err := config.Client.Operations.CategoryCreate(api_operations.NewCategoryCreateParams().WithBody(tfResource), config.Auth)
+	model := getCategory(d)
+	_, err := config.Client.Operations.CategoryCreate(api_operations.NewCategoryCreateParams().WithBody(model), config.Auth)
 
 	if err != nil {
-		log.Print("Failed to create resource : ", err)
+		log.Print("Failed to update resource : ", err)
 
 		return err
 	}
 
-	setCategory(d, tfResource)
+	setCategory(d, model)
 
 	return nil
 }
