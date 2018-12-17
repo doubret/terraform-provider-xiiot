@@ -24,7 +24,7 @@ func XiIoTProject() *schema.Resource {
 			},
 			"description": &schema.Schema{
 				Type:     schema.TypeString,
-				Required: true,
+				Optional: true,
 			},
 			"cloud_credential_ids": &schema.Schema{
 				Type: schema.TypeSet,
@@ -91,39 +91,6 @@ func getProject(d *schema.ResourceData) *api_models.Project {
 	name := d.Get("name").(string)
 	description := d.Get("description").(string)
 	edgeSelectorType := d.Get("edge_selector_type").(string)
-
-	// "users": &schema.Schema{
-	// 	Type: schema.TypeSet,
-	// 	Elem: &schema.Resource{
-	// 		Schema: map[string]*schema.Schema{
-	// 			"user_id": {
-	// 				Type:     schema.TypeString,
-	// 				Required: true,
-	// 			},
-	// 			"role": {
-	// 				Type:     schema.TypeString,
-	// 				Required: true,
-	// 			},
-	// 		},
-	// 	},
-	// 	Required: true,
-	// },
-	// "edge_selectors": &schema.Schema{
-	// 	Type: schema.TypeSet,
-	// 	Elem: &schema.Resource{
-	// 		Schema: map[string]*schema.Schema{
-	// 			"id": {
-	// 				Type:     schema.TypeString,
-	// 				Required: true,
-	// 			},
-	// 			"value": {
-	// 				Type:     schema.TypeString,
-	// 				Required: true,
-	// 			},
-	// 		},
-	// 	},
-	// 	Optional: true,
-	// },
 
 	resource := api_models.Project{
 		ID:                 d.Id(),

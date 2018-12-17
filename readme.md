@@ -87,6 +87,10 @@ Not supported yet :
 * scripts
 * scriptruntimes
 * projects
+* applications
+* datasources
+* datastreams
+* edges
 
 ### Categories
 
@@ -152,7 +156,7 @@ resource "xiiot_sensor" "sensor" {
 ### Cloud credentials
 
 ```
-resource "xiiot_awscloudcred" "credential" {
+resource "xiiot_cloudcredaws" "credential" {
   name            = "name"
   description     = "description"
   access_key      = "access_key"
@@ -161,7 +165,7 @@ resource "xiiot_awscloudcred" "credential" {
 ```
 
 ```
-resource "xiiot_gcpcloudcred" "credential" {
+resource "xiiot_cloudcredgcp" "credential" {
   name                        = "name"
   description                 = "description"
 	auth_provider_x509_cert_url = "auth_provider_x509_cert_url"

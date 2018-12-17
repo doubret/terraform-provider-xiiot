@@ -44,14 +44,15 @@ func providerSchema() map[string]*schema.Schema {
 
 func providerResources() map[string]*schema.Resource {
 	return map[string]*schema.Resource{
+		"xiiot_application":       resources.XiIoTApplication(),
 		"xiiot_category":          resources.XiIoTCategory(),
-		"xiiot_user":              resources.XiIoTUser(),
-		"xiiot_dockerprofile":     resources.XiIoTDockerProfile(),
-		"xiiot_sensor":            resources.XiIoTSensor(),
+		"xiiot_cloudcredaws":      resources.XiIoTCloudCredAws(),
+		"xiiot_cloudcredgcp":      resources.XiIoTCloudCredGcp(),
 		"xiiot_containerregistry": resources.XiIoTContainerRegistry(),
-		"xiiot_awscloudcred":      resources.XiIoTAwsCloudCred(),
-		"xiiot_gcpcloudcred":      resources.XiIoTGcpCloudCred(),
+		"xiiot_dockerprofile":     resources.XiIoTDockerProfile(),
 		"xiiot_project":           resources.XiIoTProject(),
+		"xiiot_sensor":            resources.XiIoTSensor(),
+		"xiiot_user":              resources.XiIoTUser(),
 	}
 }
 

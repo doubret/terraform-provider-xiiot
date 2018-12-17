@@ -9,13 +9,13 @@ import (
 	"github.com/hashicorp/terraform/helper/schema"
 )
 
-func XiIoTGcpCloudCred() *schema.Resource {
+func XiIoTCloudCredGcp() *schema.Resource {
 	return &schema.Resource{
 		SchemaVersion: 1,
-		Create:        createGcpCloudCred,
-		Read:          readGcpCloudCred,
-		Update:        updateGcpCloudCred,
-		Delete:        deleteGcpCloudCred,
+		Create:        createCloudCredGcp,
+		Read:          readCloudCredGcp,
+		Update:        updateCloudCredGcp,
+		Delete:        deleteCloudCredGcp,
 		Schema: map[string]*schema.Schema{
 			"name": &schema.Schema{
 				Type:     schema.TypeString,
@@ -23,7 +23,7 @@ func XiIoTGcpCloudCred() *schema.Resource {
 			},
 			"description": &schema.Schema{
 				Type:     schema.TypeString,
-				Required: true,
+				Optional: true,
 			},
 			"auth_provider_x509_cert_url": &schema.Schema{
 				Type:     schema.TypeString,
@@ -69,7 +69,7 @@ func XiIoTGcpCloudCred() *schema.Resource {
 	}
 }
 
-func getGcpCloudCred(d *schema.ResourceData) *api_models.CloudCreds {
+func getCloudCredGcp(d *schema.ResourceData) *api_models.CloudCreds {
 	name := d.Get("name").(string)
 	description := d.Get("description").(string)
 	credType := "GCP"
@@ -106,7 +106,7 @@ func getGcpCloudCred(d *schema.ResourceData) *api_models.CloudCreds {
 	return &resource
 }
 
-func setGcpCloudCred(d *schema.ResourceData, resource *api_models.CloudCreds) {
+func setCloudCredGcp(d *schema.ResourceData, resource *api_models.CloudCreds) {
 	d.Set("name", resource.Name)
 	d.Set("description", resource.Description)
 	d.Set("auth_provider_x509_cert_url", resource.GcpCredential.AuthProviderX509CertURL)
@@ -122,12 +122,12 @@ func setGcpCloudCred(d *schema.ResourceData, resource *api_models.CloudCreds) {
 	d.SetId(resource.ID)
 }
 
-func createGcpCloudCred(d *schema.ResourceData, meta interface{}) error {
-	log.Printf("[DEBUG] xiiot-provider: In createGcpCloudCred")
+func createCloudCredGcp(d *schema.ResourceData, meta interface{}) error {
+	log.Printf("[DEBUG] xiiot-provider: In createCloudCredGcp")
 
 	config := meta.(configuration.Configuration)
 
-	model := getGcpCloudCred(d)
+	model := getCloudCredGcp(d)
 	_, err := config.Client.Operations.CloudCredsCreate(api_operations.NewCloudCredsCreateParams().WithBody(model), config.Auth)
 
 	if err != nil {
@@ -136,13 +136,13 @@ func createGcpCloudCred(d *schema.ResourceData, meta interface{}) error {
 		return err
 	}
 
-	setGcpCloudCred(d, model)
+	setCloudCredGcp(d, model)
 
 	return nil
 }
 
-func readGcpCloudCred(d *schema.ResourceData, meta interface{}) error {
-	log.Printf("[DEBUG] xiiot-provider: In readGcpCloudCred")
+func readCloudCredGcp(d *schema.ResourceData, meta interface{}) error {
+	log.Printf("[DEBUG] xiiot-provider: In readCloudCredGcp")
 
 	id := d.Id()
 
@@ -156,17 +156,17 @@ func readGcpCloudCred(d *schema.ResourceData, meta interface{}) error {
 		return err
 	}
 
-	setGcpCloudCred(d, model.Payload)
+	setCloudCredGcp(d, model.Payload)
 
 	return nil
 }
 
-func updateGcpCloudCred(d *schema.ResourceData, meta interface{}) error {
-	log.Printf("[DEBUG] xiiot-provider: In updateGcpCloudCred")
+func updateCloudCredGcp(d *schema.ResourceData, meta interface{}) error {
+	log.Printf("[DEBUG] xiiot-provider: In updateCloudCredGcp")
 
 	config := meta.(configuration.Configuration)
 
-	model := getGcpCloudCred(d)
+	model := getCloudCredGcp(d)
 	_, err := config.Client.Operations.CloudCredsUpdateV2(api_operations.NewCloudCredsUpdateV2Params().WithBody(model), config.Auth)
 
 	if err != nil {
@@ -175,13 +175,13 @@ func updateGcpCloudCred(d *schema.ResourceData, meta interface{}) error {
 		return err
 	}
 
-	setGcpCloudCred(d, model)
+	setCloudCredGcp(d, model)
 
 	return nil
 }
 
-func deleteGcpCloudCred(d *schema.ResourceData, meta interface{}) error {
-	log.Printf("[DEBUG] xiiot-provider: In deleteGcpCloudCred")
+func deleteCloudCredGcp(d *schema.ResourceData, meta interface{}) error {
+	log.Printf("[DEBUG] xiiot-provider: In deleteCloudCredGcp")
 
 	id := d.Id()
 

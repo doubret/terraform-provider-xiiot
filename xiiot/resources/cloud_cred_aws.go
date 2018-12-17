@@ -9,13 +9,13 @@ import (
 	"github.com/hashicorp/terraform/helper/schema"
 )
 
-func XiIoTAwsCloudCred() *schema.Resource {
+func XiIoTCloudCredAws() *schema.Resource {
 	return &schema.Resource{
 		SchemaVersion: 1,
-		Create:        createAwsCloudCred,
-		Read:          readAwsCloudCred,
-		Update:        updateAwsCloudCred,
-		Delete:        deleteAwsCloudCred,
+		Create:        createCloudCredAws,
+		Read:          readCloudCredAws,
+		Update:        updateCloudCredAws,
+		Delete:        deleteCloudCredAws,
 		Schema: map[string]*schema.Schema{
 			"name": &schema.Schema{
 				Type:     schema.TypeString,
@@ -23,7 +23,7 @@ func XiIoTAwsCloudCred() *schema.Resource {
 			},
 			"description": &schema.Schema{
 				Type:     schema.TypeString,
-				Required: true,
+				Optional: true,
 			},
 			"access_key": &schema.Schema{
 				Type:     schema.TypeString,
@@ -37,7 +37,7 @@ func XiIoTAwsCloudCred() *schema.Resource {
 	}
 }
 
-func getAwsCloudCred(d *schema.ResourceData) *api_models.CloudCreds {
+func getCloudCredAws(d *schema.ResourceData) *api_models.CloudCreds {
 	name := d.Get("name").(string)
 	description := d.Get("description").(string)
 	credType := "AWS"
@@ -58,7 +58,7 @@ func getAwsCloudCred(d *schema.ResourceData) *api_models.CloudCreds {
 	return &resource
 }
 
-func setAwsCloudCred(d *schema.ResourceData, resource *api_models.CloudCreds) {
+func setCloudCredAws(d *schema.ResourceData, resource *api_models.CloudCreds) {
 	d.Set("name", resource.Name)
 	d.Set("description", resource.Description)
 	d.Set("access_key", resource.AwsCredential.AccessKey)
@@ -66,12 +66,12 @@ func setAwsCloudCred(d *schema.ResourceData, resource *api_models.CloudCreds) {
 	d.SetId(resource.ID)
 }
 
-func createAwsCloudCred(d *schema.ResourceData, meta interface{}) error {
-	log.Printf("[DEBUG] xiiot-provider: In createAwsCloudCred")
+func createCloudCredAws(d *schema.ResourceData, meta interface{}) error {
+	log.Printf("[DEBUG] xiiot-provider: In createCloudCredAws")
 
 	config := meta.(configuration.Configuration)
 
-	model := getAwsCloudCred(d)
+	model := getCloudCredAws(d)
 	_, err := config.Client.Operations.CloudCredsCreate(api_operations.NewCloudCredsCreateParams().WithBody(model), config.Auth)
 
 	if err != nil {
@@ -80,13 +80,13 @@ func createAwsCloudCred(d *schema.ResourceData, meta interface{}) error {
 		return err
 	}
 
-	setAwsCloudCred(d, model)
+	setCloudCredAws(d, model)
 
 	return nil
 }
 
-func readAwsCloudCred(d *schema.ResourceData, meta interface{}) error {
-	log.Printf("[DEBUG] xiiot-provider: In readAwsCloudCred")
+func readCloudCredAws(d *schema.ResourceData, meta interface{}) error {
+	log.Printf("[DEBUG] xiiot-provider: In readCloudCredAws")
 
 	id := d.Id()
 
@@ -100,17 +100,17 @@ func readAwsCloudCred(d *schema.ResourceData, meta interface{}) error {
 		return err
 	}
 
-	setAwsCloudCred(d, model.Payload)
+	setCloudCredAws(d, model.Payload)
 
 	return nil
 }
 
-func updateAwsCloudCred(d *schema.ResourceData, meta interface{}) error {
-	log.Printf("[DEBUG] xiiot-provider: In updateAwsCloudCred")
+func updateCloudCredAws(d *schema.ResourceData, meta interface{}) error {
+	log.Printf("[DEBUG] xiiot-provider: In updateCloudCredAws")
 
 	config := meta.(configuration.Configuration)
 
-	model := getAwsCloudCred(d)
+	model := getCloudCredAws(d)
 	_, err := config.Client.Operations.CloudCredsUpdateV2(api_operations.NewCloudCredsUpdateV2Params().WithBody(model), config.Auth)
 
 	if err != nil {
@@ -119,13 +119,13 @@ func updateAwsCloudCred(d *schema.ResourceData, meta interface{}) error {
 		return err
 	}
 
-	setAwsCloudCred(d, model)
+	setCloudCredAws(d, model)
 
 	return nil
 }
 
-func deleteAwsCloudCred(d *schema.ResourceData, meta interface{}) error {
-	log.Printf("[DEBUG] xiiot-provider: In deleteAwsCloudCred")
+func deleteCloudCredAws(d *schema.ResourceData, meta interface{}) error {
+	log.Printf("[DEBUG] xiiot-provider: In deleteCloudCredAws")
 
 	id := d.Id()
 
