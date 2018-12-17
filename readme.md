@@ -81,6 +81,13 @@ The following arguments are supported.
 
 ## Resources reference
 
+Not supported yet :
+* userprops ?
+* tenantprops ?
+* scripts
+* scriptruntimes
+* projects
+
 ### Categories
 
 ```
@@ -115,5 +122,30 @@ resource "xiiot_dockerprofile" "dockerprofile" {
   pwd             = "pwd"
   cloud_creds_id  = "cloud_creds_id"
   credentials     = "credentials"
+}
+```
+
+### Container registries
+
+```
+resource "xiiot_containerregistry" "containerregistry" {
+  name            = "name"
+  description     = "description"
+  type            = "type"
+  server          = "server"
+  user_name       = "user_name"
+  email           = "email"
+  pwd             = "pwd"
+  cloud_creds_id  = "cloud_creds_id"
+  credentials     = "credentials"
+}
+```
+
+### Sensors
+
+```
+resource "xiiot_sensor" "sensor" {
+  edge_id         = "edge_id"
+  topic_name      = "topic_name"
 }
 ```

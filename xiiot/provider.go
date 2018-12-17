@@ -44,9 +44,11 @@ func providerSchema() map[string]*schema.Schema {
 
 func providerResources() map[string]*schema.Resource {
 	return map[string]*schema.Resource{
-		"xiiot_category":      resources.XiIoTCategory(),
-		"xiiot_user":          resources.XiIoTUser(),
-		"xiiot_dockerprofile": resources.XiIoTDockerProfile(),
+		"xiiot_category":          resources.XiIoTCategory(),
+		"xiiot_user":              resources.XiIoTUser(),
+		"xiiot_dockerprofile":     resources.XiIoTDockerProfile(),
+		"xiiot_sensor":            resources.XiIoTSensor(),
+		"xiiot_containerregistry": resources.XiIoTContainerRegistry(),
 	}
 }
 
