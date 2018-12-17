@@ -1,6 +1,7 @@
 package utils
 
 import (
+	api_models "github.com/doubret/terraform-provider-xiiot/xiiot/client/models"
 	"github.com/hashicorp/terraform/helper/schema"
 )
 
@@ -19,6 +20,24 @@ func Convert_set_to_int_array(set *schema.Set) []int {
 
 	for _, item := range set.List() {
 		results = append(results, item.(int))
+	}
+
+	return results
+}
+
+func Convert_set_to_categoryinfo_array(set *schema.Set) []*api_models.CategoryInfo {
+	var results []*api_models.CategoryInfo
+
+	for _, raw := range set.List() {
+		item := raw.(map[string]interface{})
+
+		id := item["id"].(string)
+		value := item["value"].(string)
+
+		results = append(results, &api_models.CategoryInfo{
+			ID:    &id,
+			Value: &value,
+		})
 	}
 
 	return results

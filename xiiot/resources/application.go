@@ -14,9 +14,9 @@ func XiIoTApplication() *schema.Resource {
 	return &schema.Resource{
 		SchemaVersion: 1,
 		Create:        createApplication,
-		Read:          readApplication,
-		Update:        updateApplication,
-		Delete:        deleteApplication,
+		// Read:          readApplication,
+		Update: updateApplication,
+		Delete: deleteApplication,
 		Schema: map[string]*schema.Schema{
 			"name": &schema.Schema{
 				Type:     schema.TypeString,
@@ -65,30 +65,30 @@ func getApplication(d *schema.ResourceData) *api_models.Application {
 	name := d.Get("name").(string)
 	description := d.Get("description").(string)
 	yamlData := d.Get("yaml_data").(string)
-	projectId := d.Get("project_id").(string)
+	projectID := d.Get("project_id").(string)
 
 	resource := api_models.Application{
-		ID:          d.Id(),
-		Name:        &name,
-		Description: description,
-		YamlData:    &yamlData,
-		ProjectID:   projectId,
-		EdgeIds:     utils.Convert_set_to_string_array(d.Get("edge_ids").(*schema.Set)),
-		// EdgeSelectors
+		ID:            d.Id(),
+		Name:          &name,
+		Description:   description,
+		YamlData:      &yamlData,
+		ProjectID:     projectID,
+		EdgeIds:       utils.Convert_set_to_string_array(d.Get("edge_ids").(*schema.Set)),
+		EdgeSelectors: utils.Convert_set_to_categoryinfo_array(d.Get("edge_selectors").(*schema.Set)),
 	}
 
 	return &resource
 }
 
-func setApplication(d *schema.ResourceData, resource *api_models.Application) {
-	d.Set("name", resource.Name)
-	d.Set("description", resource.Description)
-	d.Set("yaml_data", resource.YamlData)
-	d.Set("project_id", resource.ProjectID)
-	d.Set("edge_ids", resource.EdgeIds)
-	// EdgeSelectors
-	d.SetId(resource.ID)
-}
+// func setApplication(d *schema.ResourceData, resource *api_models.Application) {
+// 	d.Set("name", resource.Name)
+// 	d.Set("description", resource.Description)
+// 	d.Set("yaml_data", resource.YamlData)
+// 	d.Set("project_id", resource.ProjectID)
+// 	d.Set("edge_ids", resource.EdgeIds)
+// 	// EdgeSelectors
+// 	d.SetId(resource.ID)
+// }
 
 func createApplication(d *schema.ResourceData, meta interface{}) error {
 	log.Printf("[DEBUG] xiiot-provider: In createApplication")
@@ -96,7 +96,7 @@ func createApplication(d *schema.ResourceData, meta interface{}) error {
 	config := meta.(configuration.Configuration)
 
 	model := getApplication(d)
-	_, err := config.Client.Operations.ApplicationCreate(api_operations.NewApplicationCreateParams().WithBody(model), config.Auth)
+	result, err := config.Client.Operations.ApplicationCreate(api_operations.NewApplicationCreateParams().WithBody(model), config.Auth)
 
 	if err != nil {
 		log.Print("Failed to create resource : ", err)
@@ -104,30 +104,30 @@ func createApplication(d *schema.ResourceData, meta interface{}) error {
 		return err
 	}
 
-	setApplication(d, model)
+	d.SetId(*result.Payload.ID)
 
 	return nil
 }
 
-func readApplication(d *schema.ResourceData, meta interface{}) error {
-	log.Printf("[DEBUG] xiiot-provider: In readApplication")
+// func readApplication(d *schema.ResourceData, meta interface{}) error {
+// 	log.Printf("[DEBUG] xiiot-provider: In readApplication")
 
-	id := d.Id()
+// 	id := d.Id()
 
-	config := meta.(configuration.Configuration)
+// 	config := meta.(configuration.Configuration)
 
-	model, err := config.Client.Operations.ApplicationGet(api_operations.NewApplicationGetParams().WithID(id), config.Auth)
+// 	model, err := config.Client.Operations.ApplicationGet(api_operations.NewApplicationGetParams().WithID(id), config.Auth)
 
-	if err != nil {
-		log.Print("Failed to read resource : ", err)
+// 	if err != nil {
+// 		log.Print("Failed to read resource : ", err)
 
-		return err
-	}
+// 		return err
+// 	}
 
-	setApplication(d, model.Payload)
+// 	setApplication(d, model.Payload)
 
-	return nil
-}
+// 	return nil
+// }
 
 func updateApplication(d *schema.ResourceData, meta interface{}) error {
 	log.Printf("[DEBUG] xiiot-provider: In updateApplication")
@@ -135,7 +135,7 @@ func updateApplication(d *schema.ResourceData, meta interface{}) error {
 	config := meta.(configuration.Configuration)
 
 	model := getApplication(d)
-	_, err := config.Client.Operations.ApplicationUpdateV2(api_operations.NewApplicationUpdateV2Params().WithBody(model), config.Auth)
+	result, err := config.Client.Operations.ApplicationUpdateV2(api_operations.NewApplicationUpdateV2Params().WithBody(model), config.Auth)
 
 	if err != nil {
 		log.Print("Failed to update resource : ", err)
@@ -143,7 +143,7 @@ func updateApplication(d *schema.ResourceData, meta interface{}) error {
 		return err
 	}
 
-	setApplication(d, model)
+	d.SetId(*result.Payload.ID)
 
 	return nil
 }
