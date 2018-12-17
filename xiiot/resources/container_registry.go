@@ -23,7 +23,7 @@ func XiIoTContainerRegistry() *schema.Resource {
 			},
 			"description": &schema.Schema{
 				Type:     schema.TypeString,
-				Required: false,
+				Required: true,
 			},
 			"type": &schema.Schema{
 				Type:     schema.TypeString,
@@ -49,57 +49,62 @@ func XiIoTContainerRegistry() *schema.Resource {
 				Type:     schema.TypeString,
 				Optional: true,
 			},
-			"credentials": &schema.Schema{
-				Type:     schema.TypeString,
-				Optional: true,
-			},
 		},
 	}
 }
 
 func getContainerRegistry(d *schema.ResourceData) *api_models.ContainerRegistry {
-	// name := d.Get("name").(string)
-	// purpose := d.Get("purpose").(string)
+	name := d.Get("name").(string)
+	description := d.Get("description").(string)
+	registryType := d.Get("type").(string)
+	server := d.Get("server").(string)
+	userName := d.Get("user_name").(string)
+	email := d.Get("email").(string)
+	pwd := d.Get("pwd").(string)
+	cloudCredsId := d.Get("cloud_creds_id").(string)
 
 	resource := api_models.ContainerRegistry{
-		// ID:      d.Id(),
-		// Name:    &name,
-		// Purpose: &purpose,
-		// Values:  utils.Convert_set_to_string_array(d.Get("values").(*schema.Set)),
+		ID:           d.Id(),
+		Name:         &name,
+		Description:  description,
+		Type:         &registryType,
+		Server:       &server,
+		UserName:     userName,
+		Email:        email,
+		Pwd:          pwd,
+		CloudCredsID: cloudCredsId,
 	}
 
 	return &resource
 }
 
 func setContainerRegistry(d *schema.ResourceData, resource *api_models.ContainerRegistry) {
-	// d.Set("xi_id", resource.ID)
-	// d.Set("name", resource.Name)
-	// d.Set("purpose", resource.Purpose)
-	// d.Set("values", resource.Values)
-	// d.SetId(resource.ID)
+	d.Set("name", resource.Name)
+	d.Set("description", resource.Description)
+	d.Set("type", resource.Type)
+	d.Set("server", resource.Server)
+	d.Set("user_name", resource.UserName)
+	d.Set("email", resource.Email)
+	d.Set("pwd", resource.Pwd)
+	d.Set("cloud_creds_id", resource.CloudCredsID)
+	d.SetId(resource.ID)
 }
 
 func createContainerRegistry(d *schema.ResourceData, meta interface{}) error {
 	log.Printf("[DEBUG] xiiot-provider: In createContainerRegistry")
 
-	read := readContainerRegistry(d, meta)
+	config := meta.(configuration.Configuration)
 
-	if read != nil {
-		config := meta.(configuration.Configuration)
+	model := getContainerRegistry(d)
+	_, err := config.Client.Operations.ContainerRegistryCreate(api_operations.NewContainerRegistryCreateParams().WithBody(model), config.Auth)
 
-		tfResource := getContainerRegistry(d)
-		_, err := config.Client.Operations.ContainerRegistryCreate(api_operations.NewContainerRegistryCreateParams().WithBody(tfResource), config.Auth)
+	if err != nil {
+		log.Print("Failed to create resource : ", err)
 
-		if err != nil {
-			log.Print("Failed to create resource : ", err)
-
-			return err
-		}
-
-		// TODO : should read back ?
-
-		setContainerRegistry(d, tfResource)
+		return err
 	}
+
+	setContainerRegistry(d, model)
 
 	return nil
 }
@@ -109,25 +114,17 @@ func readContainerRegistry(d *schema.ResourceData, meta interface{}) error {
 
 	id := d.Id()
 
-	if id == "" {
-		id = d.Get("xi_id").(string)
+	config := meta.(configuration.Configuration)
+
+	model, err := config.Client.Operations.ContainerRegistryGet(api_operations.NewContainerRegistryGetParams().WithID(id), config.Auth)
+
+	if err != nil {
+		log.Print("Failed to get resource : ", err)
+
+		return err
 	}
 
-	if id == "" {
-		d.SetId("")
-	} else {
-		config := meta.(configuration.Configuration)
-
-		xiResource, err := config.Client.Operations.ContainerRegistryGet(api_operations.NewContainerRegistryGetParams().WithID(id), config.Auth)
-
-		if err != nil {
-			log.Print("Failed to get resource : ", err)
-
-			return err
-		}
-
-		setContainerRegistry(d, xiResource.Payload)
-	}
+	setContainerRegistry(d, model.Payload)
 
 	return nil
 }
@@ -137,16 +134,16 @@ func updateContainerRegistry(d *schema.ResourceData, meta interface{}) error {
 
 	config := meta.(configuration.Configuration)
 
-	tfResource := getContainerRegistry(d)
-	_, err := config.Client.Operations.ContainerRegistryCreate(api_operations.NewContainerRegistryCreateParams().WithBody(tfResource), config.Auth)
+	model := getContainerRegistry(d)
+	_, err := config.Client.Operations.ContainerRegistryUpdate(api_operations.NewContainerRegistryUpdateParams().WithBody(model), config.Auth)
 
 	if err != nil {
-		log.Print("Failed to create resource : ", err)
+		log.Print("Failed to update resource : ", err)
 
 		return err
 	}
 
-	setContainerRegistry(d, tfResource)
+	setContainerRegistry(d, model)
 
 	return nil
 }

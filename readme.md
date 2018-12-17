@@ -77,7 +77,7 @@ The following arguments are supported.
 
 * `username` - (Required) This is the user name to access the Xi IoT REST api. Can be specified in environment variable `XI_USER`.
 * `password` - (Required) This is the password to access the Xi IoT REST api. Can be specified in environment variable `XI_PASSWORD`.
-* `endpoint` - (Optionnal) Xi IoT REST api endpoint. Can be specified in environment variable `XI_ENDPOINT`, if not specified, default to `iot.nutanix.com`.
+* `endpoint` - (Optional) Xi IoT REST api endpoint. Can be specified in environment variable `XI_ENDPOINT`, if not specified, default to `iot.nutanix.com`.
 
 ## Resources reference
 
@@ -137,7 +137,6 @@ resource "xiiot_containerregistry" "containerregistry" {
   email           = "email"
   pwd             = "pwd"
   cloud_creds_id  = "cloud_creds_id"
-  credentials     = "credentials"
 }
 ```
 

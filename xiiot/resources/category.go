@@ -103,7 +103,7 @@ func updateCategory(d *schema.ResourceData, meta interface{}) error {
 	config := meta.(configuration.Configuration)
 
 	model := getCategory(d)
-	_, err := config.Client.Operations.CategoryCreate(api_operations.NewCategoryCreateParams().WithBody(model), config.Auth)
+	_, err := config.Client.Operations.CategoryUpdateV2(api_operations.NewCategoryUpdateV2Params().WithBody(model), config.Auth)
 
 	if err != nil {
 		log.Print("Failed to update resource : ", err)

@@ -167,7 +167,7 @@ func updateGcpCloudCred(d *schema.ResourceData, meta interface{}) error {
 	config := meta.(configuration.Configuration)
 
 	model := getGcpCloudCred(d)
-	_, err := config.Client.Operations.CloudCredsCreate(api_operations.NewCloudCredsCreateParams().WithBody(model), config.Auth)
+	_, err := config.Client.Operations.CloudCredsUpdateV2(api_operations.NewCloudCredsUpdateV2Params().WithBody(model), config.Auth)
 
 	if err != nil {
 		log.Print("Failed to update resource : ", err)

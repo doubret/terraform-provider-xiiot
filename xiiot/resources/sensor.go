@@ -93,7 +93,7 @@ func updateSensor(d *schema.ResourceData, meta interface{}) error {
 	config := meta.(configuration.Configuration)
 
 	model := getSensor(d)
-	_, err := config.Client.Operations.SensorCreate(api_operations.NewSensorCreateParams().WithBody(model), config.Auth)
+	_, err := config.Client.Operations.SensorUpdateV2(api_operations.NewSensorUpdateV2Params().WithBody(model), config.Auth)
 
 	if err != nil {
 		log.Print("Failed to update resource : ", err)

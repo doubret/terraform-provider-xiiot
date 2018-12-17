@@ -17,123 +17,101 @@ func XiIoTDockerProfile() *schema.Resource {
 		Update:        updateDockerProfile,
 		Delete:        deleteDockerProfile,
 		Schema: map[string]*schema.Schema{
-			"xi_id": &schema.Schema{
-				Type:     schema.TypeString,
-				Required: false,
-				Optional: true,
-				Computed: true,
-				ForceNew: false,
-			},
 			"name": &schema.Schema{
 				Type:     schema.TypeString,
 				Required: true,
-				Optional: false,
-				Computed: false,
-				ForceNew: false,
 			},
 			"description": &schema.Schema{
 				Type:     schema.TypeString,
-				Required: false,
 				Optional: true,
-				Computed: false,
-				ForceNew: false,
 			},
 			"type": &schema.Schema{
 				Type:     schema.TypeString,
 				Required: true,
-				Optional: false,
-				Computed: false,
-				ForceNew: false,
 			},
 			"server": &schema.Schema{
 				Type:     schema.TypeString,
 				Required: true,
-				Optional: false,
-				Computed: false,
-				ForceNew: false,
 			},
 			"user_name": &schema.Schema{
 				Type:     schema.TypeString,
-				Required: false,
 				Optional: true,
-				Computed: false,
-				ForceNew: false,
 			},
 			"email": &schema.Schema{
 				Type:     schema.TypeString,
-				Required: false,
 				Optional: true,
-				Computed: false,
-				ForceNew: false,
 			},
 			"pwd": &schema.Schema{
 				Type:     schema.TypeString,
-				Required: false,
 				Optional: true,
-				Computed: false,
-				ForceNew: false,
 			},
 			"cloud_creds_id": &schema.Schema{
 				Type:     schema.TypeString,
-				Required: false,
 				Optional: true,
-				Computed: false,
-				ForceNew: false,
 			},
 			"credentials": &schema.Schema{
 				Type:     schema.TypeString,
-				Required: false,
 				Optional: true,
-				Computed: false,
-				ForceNew: false,
 			},
 		},
 	}
 }
 
 func getDockerProfile(d *schema.ResourceData) *api_models.DockerProfile {
-	// name := d.Get("name").(string)
-	// purpose := d.Get("purpose").(string)
+	name := d.Get("name").(string)
+	description := d.Get("description").(string)
+	registryType := d.Get("type").(string)
+	server := d.Get("server").(string)
+	userName := d.Get("user_name").(string)
+	email := d.Get("email").(string)
+	pwd := d.Get("pwd").(string)
+	cloudCredsId := d.Get("cloud_creds_id").(string)
+	credentials := d.Get("credentials").(string)
 
 	resource := api_models.DockerProfile{
-		// ID:      d.Id(),
-		// Name:    &name,
-		// Purpose: &purpose,
-		// Values:  utils.Convert_set_to_string_array(d.Get("values").(*schema.Set)),
+		ID:           d.Id(),
+		Name:         &name,
+		Description:  description,
+		Type:         &registryType,
+		Server:       &server,
+		UserName:     userName,
+		Email:        email,
+		Pwd:          pwd,
+		CloudCredsID: cloudCredsId,
+		Credentials:  credentials,
 	}
 
 	return &resource
 }
 
 func setDockerProfile(d *schema.ResourceData, resource *api_models.DockerProfile) {
-	// d.Set("xi_id", resource.ID)
-	// d.Set("name", resource.Name)
-	// d.Set("purpose", resource.Purpose)
-	// d.Set("values", resource.Values)
-	// d.SetId(resource.ID)
+	d.Set("name", resource.Name)
+	d.Set("description", resource.Description)
+	d.Set("type", resource.Type)
+	d.Set("server", resource.Server)
+	d.Set("user_name", resource.UserName)
+	d.Set("email", resource.Email)
+	d.Set("pwd", resource.Pwd)
+	d.Set("cloud_creds_id", resource.CloudCredsID)
+	d.Set("credentials", resource.Credentials)
+	d.SetId(resource.ID)
 }
 
 func createDockerProfile(d *schema.ResourceData, meta interface{}) error {
 	log.Printf("[DEBUG] xiiot-provider: In createDockerProfile")
 
-	read := readDockerProfile(d, meta)
+	config := meta.(configuration.Configuration)
 
-	if read != nil {
-		config := meta.(configuration.Configuration)
+	model := getDockerProfile(d)
+	_, err := config.Client.Operations.DockerProfileCreate(api_operations.NewDockerProfileCreateParams().WithBody(model), config.Auth)
 
-		tfResource := getDockerProfile(d)
-		_, err := config.Client.Operations.DockerProfileCreate(api_operations.NewDockerProfileCreateParams().WithBody(tfResource), config.Auth)
+	if err != nil {
+		log.Print("Failed to create resource : ", err)
 
-		if err != nil {
-			log.Print("Failed to create resource : ", err)
-
-			return err
-		}
-
-		// TODO : should read back ?
-
-		setDockerProfile(d, tfResource)
+		return err
 	}
+
+	setDockerProfile(d, model)
 
 	return nil
 }
@@ -143,25 +121,17 @@ func readDockerProfile(d *schema.ResourceData, meta interface{}) error {
 
 	id := d.Id()
 
-	if id == "" {
-		id = d.Get("xi_id").(string)
+	config := meta.(configuration.Configuration)
+
+	model, err := config.Client.Operations.DockerProfileGet(api_operations.NewDockerProfileGetParams().WithID(id), config.Auth)
+
+	if err != nil {
+		log.Print("Failed to get resource : ", err)
+
+		return err
 	}
 
-	if id == "" {
-		d.SetId("")
-	} else {
-		config := meta.(configuration.Configuration)
-
-		xiResource, err := config.Client.Operations.DockerProfileGet(api_operations.NewDockerProfileGetParams().WithID(id), config.Auth)
-
-		if err != nil {
-			log.Print("Failed to get resource : ", err)
-
-			return err
-		}
-
-		setDockerProfile(d, xiResource.Payload)
-	}
+	setDockerProfile(d, model.Payload)
 
 	return nil
 }
@@ -171,16 +141,16 @@ func updateDockerProfile(d *schema.ResourceData, meta interface{}) error {
 
 	config := meta.(configuration.Configuration)
 
-	tfResource := getDockerProfile(d)
-	_, err := config.Client.Operations.DockerProfileCreate(api_operations.NewDockerProfileCreateParams().WithBody(tfResource), config.Auth)
+	model := getDockerProfile(d)
+	_, err := config.Client.Operations.DockerProfileUpdateV2(api_operations.NewDockerProfileUpdateV2Params().WithBody(model), config.Auth)
 
 	if err != nil {
-		log.Print("Failed to create resource : ", err)
+		log.Print("Failed to update resource : ", err)
 
 		return err
 	}
 
-	setDockerProfile(d, tfResource)
+	setDockerProfile(d, model)
 
 	return nil
 }

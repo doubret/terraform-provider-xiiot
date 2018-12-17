@@ -106,7 +106,7 @@ func updateUser(d *schema.ResourceData, meta interface{}) error {
 	config := meta.(configuration.Configuration)
 
 	model := getUser(d)
-	_, err := config.Client.Operations.UserCreate(api_operations.NewUserCreateParams().WithBody(model), config.Auth)
+	_, err := config.Client.Operations.UserUpdateV2(api_operations.NewUserUpdateV2Params().WithBody(model), config.Auth)
 
 	if err != nil {
 		log.Print("Failed to update resource : ", err)
