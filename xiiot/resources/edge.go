@@ -14,9 +14,9 @@ func XiIoTEdge() *schema.Resource {
 	return &schema.Resource{
 		SchemaVersion: 1,
 		Create:        createEdge,
-		// Read:          readEdge,
-		Update: updateEdge,
-		Delete: deleteEdge,
+		Read:          readEdge,
+		Update:        updateEdge,
+		Delete:        deleteEdge,
 		Schema: map[string]*schema.Schema{
 			"name": &schema.Schema{
 				Type:     schema.TypeString,
@@ -139,25 +139,25 @@ func createEdge(d *schema.ResourceData, meta interface{}) error {
 	return nil
 }
 
-// func readEdge(d *schema.ResourceData, meta interface{}) error {
-// 	log.Printf("[DEBUG] xiiot-provider: In readEdge")
+func readEdge(d *schema.ResourceData, meta interface{}) error {
+	// 	log.Printf("[DEBUG] xiiot-provider: In readEdge")
 
-// 	id := d.Id()
+	// 	id := d.Id()
 
-// 	config := meta.(configuration.Configuration)
+	// 	config := meta.(configuration.Configuration)
 
-// 	model, err := config.Client.Operations.EdgeGet(api_operations.NewEdgeGetParams().WithEdgeID(id), config.Auth)
+	// 	model, err := config.Client.Operations.EdgeGet(api_operations.NewEdgeGetParams().WithEdgeID(id), config.Auth)
 
-// 	if err != nil {
-// 		log.Print("Failed to read resource : ", err)
+	// 	if err != nil {
+	// 		log.Print("Failed to read resource : ", err)
 
-// 		return err
-// 	}
+	// 		return err
+	// 	}
 
-// 	setEdge(d, model.Payload)
+	// 	setEdge(d, model.Payload)
 
-// 	return nil
-// }
+	return nil
+}
 
 func updateEdge(d *schema.ResourceData, meta interface{}) error {
 	log.Printf("[DEBUG] xiiot-provider: In updateEdge")

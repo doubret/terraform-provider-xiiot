@@ -14,9 +14,9 @@ func XiIoTApplication() *schema.Resource {
 	return &schema.Resource{
 		SchemaVersion: 1,
 		Create:        createApplication,
-		// Read:          readApplication,
-		Update: updateApplication,
-		Delete: deleteApplication,
+		Read:          readApplication,
+		Update:        updateApplication,
+		Delete:        deleteApplication,
 		Schema: map[string]*schema.Schema{
 			"name": &schema.Schema{
 				Type:     schema.TypeString,
@@ -109,25 +109,25 @@ func createApplication(d *schema.ResourceData, meta interface{}) error {
 	return nil
 }
 
-// func readApplication(d *schema.ResourceData, meta interface{}) error {
-// 	log.Printf("[DEBUG] xiiot-provider: In readApplication")
+func readApplication(d *schema.ResourceData, meta interface{}) error {
+	// 	log.Printf("[DEBUG] xiiot-provider: In readApplication")
 
-// 	id := d.Id()
+	// 	id := d.Id()
 
-// 	config := meta.(configuration.Configuration)
+	// 	config := meta.(configuration.Configuration)
 
-// 	model, err := config.Client.Operations.ApplicationGet(api_operations.NewApplicationGetParams().WithID(id), config.Auth)
+	// 	model, err := config.Client.Operations.ApplicationGet(api_operations.NewApplicationGetParams().WithID(id), config.Auth)
 
-// 	if err != nil {
-// 		log.Print("Failed to read resource : ", err)
+	// 	if err != nil {
+	// 		log.Print("Failed to read resource : ", err)
 
-// 		return err
-// 	}
+	// 		return err
+	// 	}
 
-// 	setApplication(d, model.Payload)
+	// 	setApplication(d, model.Payload)
 
-// 	return nil
-// }
+	return nil
+}
 
 func updateApplication(d *schema.ResourceData, meta interface{}) error {
 	log.Printf("[DEBUG] xiiot-provider: In updateApplication")

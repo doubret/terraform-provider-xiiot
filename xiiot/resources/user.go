@@ -31,7 +31,7 @@ func XiIoTUser() *schema.Resource {
 			},
 			"role": &schema.Schema{
 				Type:     schema.TypeString,
-				Required: false,
+				Optional: true,
 			},
 		},
 	}

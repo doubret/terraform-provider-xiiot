@@ -14,9 +14,9 @@ func XiIoTProject() *schema.Resource {
 	return &schema.Resource{
 		SchemaVersion: 1,
 		Create:        createProject,
-		// Read:          readProject,
-		Update: updateProject,
-		Delete: deleteProject,
+		Read:          readProject,
+		Update:        updateProject,
+		Delete:        deleteProject,
 		Schema: map[string]*schema.Schema{
 			"name": &schema.Schema{
 				Type:     schema.TypeString,
@@ -138,25 +138,25 @@ func createProject(d *schema.ResourceData, meta interface{}) error {
 	return nil
 }
 
-// func readProject(d *schema.ResourceData, meta interface{}) error {
-// 	log.Printf("[DEBUG] xiiot-provider: In readProject")
+func readProject(d *schema.ResourceData, meta interface{}) error {
+	// 	log.Printf("[DEBUG] xiiot-provider: In readProject")
 
-// 	id := d.Id()
+	// 	id := d.Id()
 
-// 	config := meta.(configuration.Configuration)
+	// 	config := meta.(configuration.Configuration)
 
-// 	model, err := config.Client.Operations.ProjectGet(api_operations.NewProjectGetParams().WithProjectID(id), config.Auth)
+	// 	model, err := config.Client.Operations.ProjectGet(api_operations.NewProjectGetParams().WithProjectID(id), config.Auth)
 
-// 	if err != nil {
-// 		log.Print("Failed to read resource : ", err)
+	// 	if err != nil {
+	// 		log.Print("Failed to read resource : ", err)
 
-// 		return err
-// 	}
+	// 		return err
+	// 	}
 
-// 	setProject(d, model.Payload)
+	// 	setProject(d, model.Payload)
 
-// 	return nil
-// }
+	return nil
+}
 
 func updateProject(d *schema.ResourceData, meta interface{}) error {
 	log.Printf("[DEBUG] xiiot-provider: In updateProject")
