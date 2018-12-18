@@ -65,7 +65,7 @@ func getDockerProfile(d *schema.ResourceData) *api_models.DockerProfile {
 	userName := d.Get("user_name").(string)
 	email := d.Get("email").(string)
 	pwd := d.Get("pwd").(string)
-	cloudCredsId := d.Get("cloud_creds_id").(string)
+	cloudCredsID := d.Get("cloud_creds_id").(string)
 	credentials := d.Get("credentials").(string)
 
 	resource := api_models.DockerProfile{
@@ -77,7 +77,7 @@ func getDockerProfile(d *schema.ResourceData) *api_models.DockerProfile {
 		UserName:     userName,
 		Email:        email,
 		Pwd:          pwd,
-		CloudCredsID: cloudCredsId,
+		CloudCredsID: cloudCredsID,
 		Credentials:  credentials,
 	}
 

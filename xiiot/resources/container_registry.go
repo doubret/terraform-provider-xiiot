@@ -61,7 +61,7 @@ func getContainerRegistry(d *schema.ResourceData) *api_models.ContainerRegistry 
 	userName := d.Get("user_name").(string)
 	email := d.Get("email").(string)
 	pwd := d.Get("pwd").(string)
-	cloudCredsId := d.Get("cloud_creds_id").(string)
+	cloudCredsID := d.Get("cloud_creds_id").(string)
 
 	resource := api_models.ContainerRegistry{
 		ID:           d.Id(),
@@ -72,7 +72,7 @@ func getContainerRegistry(d *schema.ResourceData) *api_models.ContainerRegistry 
 		UserName:     userName,
 		Email:        email,
 		Pwd:          pwd,
-		CloudCredsID: cloudCredsId,
+		CloudCredsID: cloudCredsID,
 	}
 
 	return &resource

@@ -72,14 +72,14 @@ func getCloudCredGcp(d *schema.ResourceData) *api_models.CloudCreds {
 	description := d.Get("description").(string)
 	credType := "GCP"
 	authProviderX509CertURL := d.Get("auth_provider_x509_cert_url").(string)
-	authUri := d.Get("auth_uri").(string)
+	authURI := d.Get("auth_uri").(string)
 	clientEmail := d.Get("client_email").(string)
-	clientId := d.Get("client_id").(string)
-	clientX509CertUrl := d.Get("client_x509_cert_url").(string)
+	clientID := d.Get("client_id").(string)
+	clientX509CertURL := d.Get("client_x509_cert_url").(string)
 	privateKey := d.Get("private_key").(string)
-	privateKeyId := d.Get("private_key_id").(string)
-	projectId := d.Get("project_id").(string)
-	tokenUri := d.Get("token_uri").(string)
+	privateKeyID := d.Get("private_key_id").(string)
+	projectID := d.Get("project_id").(string)
+	tokenURI := d.Get("token_uri").(string)
 	gcpType := d.Get("type").(string)
 
 	resource := api_models.CloudCreds{
@@ -89,14 +89,14 @@ func getCloudCredGcp(d *schema.ResourceData) *api_models.CloudCreds {
 		Type:        &credType,
 		GcpCredential: &api_models.GCPCredential{
 			AuthProviderX509CertURL: &authProviderX509CertURL,
-			AuthURI:                 &authUri,
+			AuthURI:                 &authURI,
 			ClientEmail:             &clientEmail,
-			ClientID:                &clientId,
-			ClientX509CertURL:       &clientX509CertUrl,
+			ClientID:                &clientID,
+			ClientX509CertURL:       &clientX509CertURL,
 			PrivateKey:              &privateKey,
-			PrivateKeyID:            &privateKeyId,
-			ProjectID:               &projectId,
-			TokenURI:                &tokenUri,
+			PrivateKeyID:            &privateKeyID,
+			ProjectID:               &projectID,
+			TokenURI:                &tokenURI,
 			Type:                    &gcpType,
 		},
 	}
