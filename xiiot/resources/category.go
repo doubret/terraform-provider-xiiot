@@ -1,8 +1,6 @@
 package resources
 
 import (
-	"log"
-
 	api_operations "github.com/doubret/terraform-provider-xiiot/xiiot/client/client/operations"
 	api_models "github.com/doubret/terraform-provider-xiiot/xiiot/client/models"
 	"github.com/doubret/terraform-provider-xiiot/xiiot/configuration"
@@ -55,79 +53,58 @@ func setCategory(d *schema.ResourceData, resource *api_models.Category) {
 	d.Set("name", resource.Name)
 	d.Set("purpose", resource.Purpose)
 	d.Set("values", resource.Values)
-	d.SetId(resource.ID)
 }
 
 func createCategory(d *schema.ResourceData, meta interface{}) error {
-	log.Printf("[DEBUG] xiiot-provider: In createCategory")
-
 	config := meta.(configuration.Configuration)
 
-	model := getCategory(d)
-	_, err := config.Client.Operations.CategoryCreate(api_operations.NewCategoryCreateParams().WithBody(model), config.Auth)
+	result, err := config.Client.Operations.CategoryCreate(api_operations.NewCategoryCreateParams().WithBody(getCategory(d)), config.Auth)
 
 	if err != nil {
-		log.Print("Failed to create resource : ", err)
-
 		return err
 	}
 
-	setCategory(d, model)
+	d.SetId(*result.Payload.ID)
 
-	return nil
+	return readCategory(d, meta)
 }
 
 func readCategory(d *schema.ResourceData, meta interface{}) error {
-	log.Printf("[DEBUG] xiiot-provider: In readCategory")
-
 	id := d.Id()
 
 	config := meta.(configuration.Configuration)
 
-	model, err := config.Client.Operations.CategoryGet(api_operations.NewCategoryGetParams().WithID(id), config.Auth)
+	resource, err := config.Client.Operations.CategoryGet(api_operations.NewCategoryGetParams().WithID(id), config.Auth)
 
 	if err != nil {
-		log.Print("Failed to read resource : ", err)
-
 		return err
 	}
 
-	setCategory(d, model.Payload)
+	setCategory(d, resource.Payload)
 
 	return nil
 }
 
 func updateCategory(d *schema.ResourceData, meta interface{}) error {
-	log.Printf("[DEBUG] xiiot-provider: In updateCategory")
-
 	config := meta.(configuration.Configuration)
 
-	model := getCategory(d)
-	_, err := config.Client.Operations.CategoryUpdateV2(api_operations.NewCategoryUpdateV2Params().WithBody(model), config.Auth)
+	result, err := config.Client.Operations.CategoryUpdateV2(api_operations.NewCategoryUpdateV2Params().WithBody(getCategory(d)), config.Auth)
 
 	if err != nil {
-		log.Print("Failed to update resource : ", err)
-
 		return err
 	}
 
-	setCategory(d, model)
+	d.SetId(*result.Payload.ID)
 
-	return nil
+	return readCategory(d, meta)
 }
 
 func deleteCategory(d *schema.ResourceData, meta interface{}) error {
-	log.Printf("[DEBUG] xiiot-provider: In deleteCategory")
-
-	id := d.Id()
-
 	config := meta.(configuration.Configuration)
 
-	_, err := config.Client.Operations.CategoryDelete(api_operations.NewCategoryDeleteParams().WithID(id), config.Auth)
+	_, err := config.Client.Operations.CategoryDelete(api_operations.NewCategoryDeleteParams().WithID(d.Id()), config.Auth)
 
 	if err != nil {
-		log.Print("Failed to delete resource : ", err)
-
 		return err
 	}
 

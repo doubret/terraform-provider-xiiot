@@ -30,12 +30,12 @@ func XiIoTSensor() *schema.Resource {
 }
 
 func getSensor(d *schema.ResourceData) *api_models.Sensor {
-	edgeId := d.Get("edge_id").(string)
+	edgeID := d.Get("edge_id").(string)
 	topicName := d.Get("topic_name").(string)
 
 	resource := api_models.Sensor{
 		ID:        d.Id(),
-		EdgeID:    &edgeId,
+		EdgeID:    &edgeID,
 		TopicName: &topicName,
 	}
 

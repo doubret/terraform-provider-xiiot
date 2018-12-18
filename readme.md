@@ -81,15 +81,15 @@ The following arguments are supported.
 
 ## Resources reference
 
-Not supported yet :
-* userprops ?
-* tenantprops ?
+Not supported (yet) :
 * scripts
 * scriptruntimes
-* projects
-* applications
 * datasources
 * datastreams
+
+Supported but not documented (yet) :
+* projects
+* applications
 * edges
 
 ### Categories
