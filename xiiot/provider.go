@@ -50,6 +50,7 @@ func providerResources() map[string]*schema.Resource {
 		"xiiot_cloudcredgcp":      resources.XiIoTCloudCredGcp(),
 		"xiiot_containerregistry": resources.XiIoTContainerRegistry(),
 		"xiiot_dockerprofile":     resources.XiIoTDockerProfile(),
+		"xiiot_edge":              resources.XiIoTEdge(),
 		"xiiot_project":           resources.XiIoTProject(),
 		"xiiot_sensor":            resources.XiIoTSensor(),
 		"xiiot_user":              resources.XiIoTUser(),
