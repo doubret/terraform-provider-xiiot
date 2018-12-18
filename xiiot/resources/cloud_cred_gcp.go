@@ -1,8 +1,6 @@
 package resources
 
 import (
-	"log"
-
 	api_operations "github.com/doubret/terraform-provider-xiiot/xiiot/client/client/operations"
 	api_models "github.com/doubret/terraform-provider-xiiot/xiiot/client/models"
 	"github.com/doubret/terraform-provider-xiiot/xiiot/configuration"
@@ -119,40 +117,28 @@ func setCloudCredGcp(d *schema.ResourceData, resource *api_models.CloudCreds) {
 	d.Set("project_id", resource.GcpCredential.ProjectID)
 	d.Set("token_uri", resource.GcpCredential.TokenURI)
 	d.Set("type", resource.GcpCredential.Type)
-	d.SetId(resource.ID)
 }
 
 func createCloudCredGcp(d *schema.ResourceData, meta interface{}) error {
-	log.Printf("[DEBUG] xiiot-provider: In createCloudCredGcp")
-
 	config := meta.(configuration.Configuration)
 
-	model := getCloudCredGcp(d)
-	_, err := config.Client.Operations.CloudCredsCreate(api_operations.NewCloudCredsCreateParams().WithBody(model), config.Auth)
+	result, err := config.Client.Operations.CloudCredsCreate(api_operations.NewCloudCredsCreateParams().WithBody(getCloudCredGcp(d)), config.Auth)
 
 	if err != nil {
-		log.Print("Failed to create resource : ", err)
-
 		return err
 	}
 
-	setCloudCredGcp(d, model)
+	d.SetId(*result.Payload.ID)
 
-	return nil
+	return readCloudCredGcp(d, meta)
 }
 
 func readCloudCredGcp(d *schema.ResourceData, meta interface{}) error {
-	log.Printf("[DEBUG] xiiot-provider: In readCloudCredGcp")
-
-	id := d.Id()
-
 	config := meta.(configuration.Configuration)
 
-	model, err := config.Client.Operations.CloudCredsGet(api_operations.NewCloudCredsGetParams().WithID(id), config.Auth)
+	model, err := config.Client.Operations.CloudCredsGet(api_operations.NewCloudCredsGetParams().WithID(d.Id()), config.Auth)
 
 	if err != nil {
-		log.Print("Failed to get resource : ", err)
-
 		return err
 	}
 
@@ -162,36 +148,23 @@ func readCloudCredGcp(d *schema.ResourceData, meta interface{}) error {
 }
 
 func updateCloudCredGcp(d *schema.ResourceData, meta interface{}) error {
-	log.Printf("[DEBUG] xiiot-provider: In updateCloudCredGcp")
-
 	config := meta.(configuration.Configuration)
 
-	model := getCloudCredGcp(d)
-	_, err := config.Client.Operations.CloudCredsUpdateV2(api_operations.NewCloudCredsUpdateV2Params().WithBody(model), config.Auth)
+	_, err := config.Client.Operations.CloudCredsUpdateV2(api_operations.NewCloudCredsUpdateV2Params().WithBody(getCloudCredGcp(d)), config.Auth)
 
 	if err != nil {
-		log.Print("Failed to update resource : ", err)
-
 		return err
 	}
 
-	setCloudCredGcp(d, model)
-
-	return nil
+	return readCloudCredGcp(d, meta)
 }
 
 func deleteCloudCredGcp(d *schema.ResourceData, meta interface{}) error {
-	log.Printf("[DEBUG] xiiot-provider: In deleteCloudCredGcp")
-
-	id := d.Id()
-
 	config := meta.(configuration.Configuration)
 
-	_, err := config.Client.Operations.CloudCredsDelete(api_operations.NewCloudCredsDeleteParams().WithID(id), config.Auth)
+	_, err := config.Client.Operations.CloudCredsDelete(api_operations.NewCloudCredsDeleteParams().WithID(d.Id()), config.Auth)
 
 	if err != nil {
-		log.Print("Failed to delete resource : ", err)
-
 		return err
 	}
 
