@@ -1,8 +1,6 @@
 package resources
 
 import (
-	"log"
-
 	api_operations "github.com/doubret/terraform-provider-xiiot/xiiot/client/client/operations"
 	api_models "github.com/doubret/terraform-provider-xiiot/xiiot/client/models"
 	"github.com/doubret/terraform-provider-xiiot/xiiot/configuration"
@@ -32,6 +30,7 @@ func XiIoTUser() *schema.Resource {
 			"role": &schema.Schema{
 				Type:     schema.TypeString,
 				Optional: true,
+				Computed: true,
 			},
 		},
 	}
@@ -58,79 +57,54 @@ func setUser(d *schema.ResourceData, resource *api_models.User) {
 	d.Set("email", resource.Email)
 	d.Set("password", resource.Password)
 	d.Set("role", resource.Role)
-	d.SetId(resource.ID)
 }
 
 func createUser(d *schema.ResourceData, meta interface{}) error {
-	log.Printf("[DEBUG] xiiot-provider: In createUser")
-
 	config := meta.(configuration.Configuration)
 
-	model := getUser(d)
-	_, err := config.Client.Operations.UserCreate(api_operations.NewUserCreateParams().WithBody(model), config.Auth)
+	result, err := config.Client.Operations.UserCreate(api_operations.NewUserCreateParams().WithBody(getUser(d)), config.Auth)
 
 	if err != nil {
-		log.Print("Failed to create resource : ", err)
-
 		return err
 	}
 
-	setUser(d, model)
+	d.SetId(*result.Payload.ID)
 
-	return nil
+	return readCategory(d, meta)
 }
 
 func readUser(d *schema.ResourceData, meta interface{}) error {
-	log.Printf("[DEBUG] xiiot-provider: In readUser")
-
-	id := d.Id()
-
 	config := meta.(configuration.Configuration)
 
-	model, err := config.Client.Operations.UserGet(api_operations.NewUserGetParams().WithID(id), config.Auth)
+	resource, err := config.Client.Operations.UserGet(api_operations.NewUserGetParams().WithID(d.Id()), config.Auth)
 
 	if err != nil {
-		log.Print("Failed to get resource : ", err)
-
 		return err
 	}
 
-	setUser(d, model.Payload)
+	setUser(d, resource.Payload)
 
 	return nil
 }
 
 func updateUser(d *schema.ResourceData, meta interface{}) error {
-	log.Printf("[DEBUG] xiiot-provider: In updateUser")
-
 	config := meta.(configuration.Configuration)
 
-	model := getUser(d)
-	_, err := config.Client.Operations.UserUpdateV2(api_operations.NewUserUpdateV2Params().WithBody(model), config.Auth)
+	_, err := config.Client.Operations.UserUpdateV2(api_operations.NewUserUpdateV2Params().WithBody(getUser(d)), config.Auth)
 
 	if err != nil {
-		log.Print("Failed to update resource : ", err)
-
 		return err
 	}
 
-	setUser(d, model)
-
-	return nil
+	return readCategory(d, meta)
 }
 
 func deleteUser(d *schema.ResourceData, meta interface{}) error {
-	log.Printf("[DEBUG] xiiot-provider: In deleteUser")
-
-	id := d.Id()
-
 	config := meta.(configuration.Configuration)
 
-	_, err := config.Client.Operations.UserDelete(api_operations.NewUserDeleteParams().WithID(id), config.Auth)
+	_, err := config.Client.Operations.UserDelete(api_operations.NewUserDeleteParams().WithID(d.Id()), config.Auth)
 
 	if err != nil {
-		log.Print("Failed to delete resource : ", err)
-
 		return err
 	}
 

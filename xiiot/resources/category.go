@@ -70,11 +70,9 @@ func createCategory(d *schema.ResourceData, meta interface{}) error {
 }
 
 func readCategory(d *schema.ResourceData, meta interface{}) error {
-	id := d.Id()
-
 	config := meta.(configuration.Configuration)
 
-	resource, err := config.Client.Operations.CategoryGet(api_operations.NewCategoryGetParams().WithID(id), config.Auth)
+	resource, err := config.Client.Operations.CategoryGet(api_operations.NewCategoryGetParams().WithID(d.Id()), config.Auth)
 
 	if err != nil {
 		return err
@@ -88,13 +86,11 @@ func readCategory(d *schema.ResourceData, meta interface{}) error {
 func updateCategory(d *schema.ResourceData, meta interface{}) error {
 	config := meta.(configuration.Configuration)
 
-	result, err := config.Client.Operations.CategoryUpdateV2(api_operations.NewCategoryUpdateV2Params().WithBody(getCategory(d)), config.Auth)
+	_, err := config.Client.Operations.CategoryUpdateV2(api_operations.NewCategoryUpdateV2Params().WithBody(getCategory(d)), config.Auth)
 
 	if err != nil {
 		return err
 	}
-
-	d.SetId(*result.Payload.ID)
 
 	return readCategory(d, meta)
 }
