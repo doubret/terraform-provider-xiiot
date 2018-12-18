@@ -70,7 +70,7 @@ func createUser(d *schema.ResourceData, meta interface{}) error {
 
 	d.SetId(*result.Payload.ID)
 
-	return readCategory(d, meta)
+	return readUser(d, meta)
 }
 
 func readUser(d *schema.ResourceData, meta interface{}) error {
@@ -96,7 +96,7 @@ func updateUser(d *schema.ResourceData, meta interface{}) error {
 		return err
 	}
 
-	return readCategory(d, meta)
+	return readUser(d, meta)
 }
 
 func deleteUser(d *schema.ResourceData, meta interface{}) error {
