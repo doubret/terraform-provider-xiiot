@@ -1,8 +1,6 @@
 package resources
 
 import (
-	"log"
-
 	api_operations "github.com/doubret/terraform-provider-xiiot/xiiot/client/client/operations"
 	api_models "github.com/doubret/terraform-provider-xiiot/xiiot/client/models"
 	"github.com/doubret/terraform-provider-xiiot/xiiot/configuration"
@@ -63,79 +61,54 @@ func setCloudCredAws(d *schema.ResourceData, resource *api_models.CloudCreds) {
 	d.Set("description", resource.Description)
 	d.Set("access_key", resource.AwsCredential.AccessKey)
 	d.Set("secret_key", resource.AwsCredential.Secret)
-	d.SetId(resource.ID)
 }
 
 func createCloudCredAws(d *schema.ResourceData, meta interface{}) error {
-	log.Printf("[DEBUG] xiiot-provider: In createCloudCredAws")
-
 	config := meta.(configuration.Configuration)
 
-	model := getCloudCredAws(d)
-	_, err := config.Client.Operations.CloudCredsCreate(api_operations.NewCloudCredsCreateParams().WithBody(model), config.Auth)
+	result, err := config.Client.Operations.CloudCredsCreate(api_operations.NewCloudCredsCreateParams().WithBody(getCloudCredAws(d)), config.Auth)
 
 	if err != nil {
-		log.Print("Failed to create resource : ", err)
-
 		return err
 	}
 
-	setCloudCredAws(d, model)
+	d.SetId(*result.Payload.ID)
 
-	return nil
+	return readCloudCredAws(d, meta)
 }
 
 func readCloudCredAws(d *schema.ResourceData, meta interface{}) error {
-	log.Printf("[DEBUG] xiiot-provider: In readCloudCredAws")
-
-	id := d.Id()
-
 	config := meta.(configuration.Configuration)
 
-	model, err := config.Client.Operations.CloudCredsGet(api_operations.NewCloudCredsGetParams().WithID(id), config.Auth)
+	resource, err := config.Client.Operations.CloudCredsGet(api_operations.NewCloudCredsGetParams().WithID(d.Id()), config.Auth)
 
 	if err != nil {
-		log.Print("Failed to get resource : ", err)
-
 		return err
 	}
 
-	setCloudCredAws(d, model.Payload)
+	setCloudCredAws(d, resource.Payload)
 
 	return nil
 }
 
 func updateCloudCredAws(d *schema.ResourceData, meta interface{}) error {
-	log.Printf("[DEBUG] xiiot-provider: In updateCloudCredAws")
-
 	config := meta.(configuration.Configuration)
 
-	model := getCloudCredAws(d)
-	_, err := config.Client.Operations.CloudCredsUpdateV2(api_operations.NewCloudCredsUpdateV2Params().WithBody(model), config.Auth)
+	_, err := config.Client.Operations.CloudCredsUpdateV2(api_operations.NewCloudCredsUpdateV2Params().WithBody(getCloudCredAws(d)), config.Auth)
 
 	if err != nil {
-		log.Print("Failed to update resource : ", err)
-
 		return err
 	}
 
-	setCloudCredAws(d, model)
-
-	return nil
+	return readCloudCredAws(d, meta)
 }
 
 func deleteCloudCredAws(d *schema.ResourceData, meta interface{}) error {
-	log.Printf("[DEBUG] xiiot-provider: In deleteCloudCredAws")
-
-	id := d.Id()
-
 	config := meta.(configuration.Configuration)
 
-	_, err := config.Client.Operations.CloudCredsDelete(api_operations.NewCloudCredsDeleteParams().WithID(id), config.Auth)
+	_, err := config.Client.Operations.CloudCredsDelete(api_operations.NewCloudCredsDeleteParams().WithID(d.Id()), config.Auth)
 
 	if err != nil {
-		log.Print("Failed to delete resource : ", err)
-
 		return err
 	}
 
