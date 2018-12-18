@@ -14,9 +14,9 @@ func XiIoTProject() *schema.Resource {
 	return &schema.Resource{
 		SchemaVersion: 1,
 		Create:        createProject,
-		Read:          readProject,
-		Update:        updateProject,
-		Delete:        deleteProject,
+		// Read:          readProject,
+		Update: updateProject,
+		Delete: deleteProject,
 		Schema: map[string]*schema.Schema{
 			"name": &schema.Schema{
 				Type:     schema.TypeString,
@@ -100,24 +100,24 @@ func getProject(d *schema.ResourceData) *api_models.Project {
 		DockerProfileIds:   utils.Convert_set_to_string_array(d.Get("docker_profile_ids").(*schema.Set)),
 		EdgeIds:            utils.Convert_set_to_string_array(d.Get("edge_ids").(*schema.Set)),
 		EdgeSelectorType:   &edgeSelectorType,
-		// Users
-		// EdgeSelectors
+		EdgeSelectors:      utils.Convert_set_to_categoryinfo_array(d.Get("edge_selectors").(*schema.Set)),
+		Users:              utils.Convert_set_to_projectuserinfo_array(d.Get("users").(*schema.Set)),
 	}
 
 	return &resource
 }
 
-func setProject(d *schema.ResourceData, resource *api_models.Project) {
-	d.Set("name", resource.Name)
-	d.Set("description", resource.Description)
-	d.Set("cloud_credential_ids", resource.CloudCredentialIds)
-	d.Set("docker_profile_ids", resource.DockerProfileIds)
-	d.Set("edge_ids", resource.EdgeIds)
-	d.Set("edge_selector_type", resource.EdgeSelectorType)
-	// Users
-	// EdgeSelectors
-	d.SetId(resource.ID)
-}
+// func setProject(d *schema.ResourceData, resource *api_models.Project) {
+// 	d.Set("name", resource.Name)
+// 	d.Set("description", resource.Description)
+// 	d.Set("cloud_credential_ids", resource.CloudCredentialIds)
+// 	d.Set("docker_profile_ids", resource.DockerProfileIds)
+// 	d.Set("edge_ids", resource.EdgeIds)
+// 	d.Set("edge_selector_type", resource.EdgeSelectorType)
+// 	// Users
+// 	// EdgeSelectors
+// 	d.SetId(resource.ID)
+// }
 
 func createProject(d *schema.ResourceData, meta interface{}) error {
 	log.Printf("[DEBUG] xiiot-provider: In createProject")
@@ -125,7 +125,7 @@ func createProject(d *schema.ResourceData, meta interface{}) error {
 	config := meta.(configuration.Configuration)
 
 	model := getProject(d)
-	_, err := config.Client.Operations.ProjectCreate(api_operations.NewProjectCreateParams().WithDoc(model), config.Auth)
+	result, err := config.Client.Operations.ProjectCreate(api_operations.NewProjectCreateParams().WithDoc(model), config.Auth)
 
 	if err != nil {
 		log.Print("Failed to create resource : ", err)
@@ -133,30 +133,30 @@ func createProject(d *schema.ResourceData, meta interface{}) error {
 		return err
 	}
 
-	setProject(d, model)
+	d.SetId(*result.Payload.ID)
 
 	return nil
 }
 
-func readProject(d *schema.ResourceData, meta interface{}) error {
-	log.Printf("[DEBUG] xiiot-provider: In readProject")
+// func readProject(d *schema.ResourceData, meta interface{}) error {
+// 	log.Printf("[DEBUG] xiiot-provider: In readProject")
 
-	id := d.Id()
+// 	id := d.Id()
 
-	config := meta.(configuration.Configuration)
+// 	config := meta.(configuration.Configuration)
 
-	model, err := config.Client.Operations.ProjectGet(api_operations.NewProjectGetParams().WithProjectID(id), config.Auth)
+// 	model, err := config.Client.Operations.ProjectGet(api_operations.NewProjectGetParams().WithProjectID(id), config.Auth)
 
-	if err != nil {
-		log.Print("Failed to read resource : ", err)
+// 	if err != nil {
+// 		log.Print("Failed to read resource : ", err)
 
-		return err
-	}
+// 		return err
+// 	}
 
-	setProject(d, model.Payload)
+// 	setProject(d, model.Payload)
 
-	return nil
-}
+// 	return nil
+// }
 
 func updateProject(d *schema.ResourceData, meta interface{}) error {
 	log.Printf("[DEBUG] xiiot-provider: In updateProject")
@@ -164,7 +164,7 @@ func updateProject(d *schema.ResourceData, meta interface{}) error {
 	config := meta.(configuration.Configuration)
 
 	model := getProject(d)
-	_, err := config.Client.Operations.ProjectUpdateV2(api_operations.NewProjectUpdateV2Params().WithDoc(model), config.Auth)
+	result, err := config.Client.Operations.ProjectUpdateV2(api_operations.NewProjectUpdateV2Params().WithDoc(model), config.Auth)
 
 	if err != nil {
 		log.Print("Failed to update resource : ", err)
@@ -172,7 +172,7 @@ func updateProject(d *schema.ResourceData, meta interface{}) error {
 		return err
 	}
 
-	setProject(d, model)
+	d.SetId(*result.Payload.ID)
 
 	return nil
 }
