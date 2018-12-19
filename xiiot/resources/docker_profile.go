@@ -1,8 +1,6 @@
 package resources
 
 import (
-	"log"
-
 	api_operations "github.com/doubret/terraform-provider-xiiot/xiiot/client/client/operations"
 	api_models "github.com/doubret/terraform-provider-xiiot/xiiot/client/models"
 	"github.com/doubret/terraform-provider-xiiot/xiiot/configuration"
@@ -94,79 +92,54 @@ func setDockerProfile(d *schema.ResourceData, resource *api_models.DockerProfile
 	d.Set("pwd", resource.Pwd)
 	d.Set("cloud_creds_id", resource.CloudCredsID)
 	d.Set("credentials", resource.Credentials)
-	d.SetId(resource.ID)
 }
 
 func createDockerProfile(d *schema.ResourceData, meta interface{}) error {
-	log.Printf("[DEBUG] xiiot-provider: In createDockerProfile")
-
 	config := meta.(configuration.Configuration)
 
-	model := getDockerProfile(d)
-	_, err := config.Client.Operations.DockerProfileCreate(api_operations.NewDockerProfileCreateParams().WithBody(model), config.Auth)
+	result, err := config.Client.Operations.DockerProfileCreate(api_operations.NewDockerProfileCreateParams().WithBody(getDockerProfile(d)), config.Auth)
 
 	if err != nil {
-		log.Print("Failed to create resource : ", err)
-
 		return err
 	}
 
-	setDockerProfile(d, model)
+	d.SetId(*result.Payload.ID)
 
-	return nil
+	return readDockerProfile(d, meta)
 }
 
 func readDockerProfile(d *schema.ResourceData, meta interface{}) error {
-	log.Printf("[DEBUG] xiiot-provider: In readDockerProfile")
-
-	id := d.Id()
-
 	config := meta.(configuration.Configuration)
 
-	model, err := config.Client.Operations.DockerProfileGet(api_operations.NewDockerProfileGetParams().WithID(id), config.Auth)
+	resource, err := config.Client.Operations.DockerProfileGet(api_operations.NewDockerProfileGetParams().WithID(d.Id()), config.Auth)
 
 	if err != nil {
-		log.Print("Failed to get resource : ", err)
-
 		return err
 	}
 
-	setDockerProfile(d, model.Payload)
+	setDockerProfile(d, resource.Payload)
 
 	return nil
 }
 
 func updateDockerProfile(d *schema.ResourceData, meta interface{}) error {
-	log.Printf("[DEBUG] xiiot-provider: In updateDockerProfile")
-
 	config := meta.(configuration.Configuration)
 
-	model := getDockerProfile(d)
-	_, err := config.Client.Operations.DockerProfileUpdateV2(api_operations.NewDockerProfileUpdateV2Params().WithBody(model), config.Auth)
+	_, err := config.Client.Operations.DockerProfileUpdateV2(api_operations.NewDockerProfileUpdateV2Params().WithBody(getDockerProfile(d)), config.Auth)
 
 	if err != nil {
-		log.Print("Failed to update resource : ", err)
-
 		return err
 	}
 
-	setDockerProfile(d, model)
-
-	return nil
+	return readDockerProfile(d, meta)
 }
 
 func deleteDockerProfile(d *schema.ResourceData, meta interface{}) error {
-	log.Printf("[DEBUG] xiiot-provider: In deleteDockerProfile")
-
-	id := d.Id()
-
 	config := meta.(configuration.Configuration)
 
-	_, err := config.Client.Operations.DockerProfileDelete(api_operations.NewDockerProfileDeleteParams().WithID(id), config.Auth)
+	_, err := config.Client.Operations.DockerProfileDelete(api_operations.NewDockerProfileDeleteParams().WithID(d.Id()), config.Auth)
 
 	if err != nil {
-		log.Print("Failed to delete resource : ", err)
-
 		return err
 	}
 
