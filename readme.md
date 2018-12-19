@@ -19,61 +19,45 @@ For now, building from sources is the only way to get the binaries for this prov
 
 ### Build steps
 
-1. Install GO tools from https://golang.org/dl/
+1. Install Go tools from https://golang.org/dl/
 2. Check out this repository: `git clone https://github.com/doubret/terraform-provider-xiiot.git`
 3. Get dependencies
 ```
 go get github.com/hashicorp/terraform
 go get github.com/go-swagger/go-swagger
+go get github.com/go-openapi/errors
+go get github.com/go-openapi/runtime
+go get github.com/go-openapi/runtime/client
+go get github.com/go-openapi/strfmt
 ```
-4. Generate api client
+4. Build go-swagger generator
+```
+go install github.com/go-swagger/go-swagger/cmd/swagger
+```
+5. Generate api client
 ```
 swagger generate client -f https://iot.nutanix.com/swagger.json -A xiClient
 ```
-5. Build with `go build` or `go install`
+6. Build with `go build` or `go install`
 
 ## Usage
 
-### Install terraform
+1. Install terraform as explained [here](https://learn.hashicorp.com/terraform/getting-started/install)
+2. Build the provider from sources and copy it in the terraform plugins folder.
 
-Install terraform as explained [here](https://learn.hashicorp.com/terraform/getting-started/install)
-
-### Install terraform-provider-xiiot (on windows)
-
+On windows :
 * Create folder `%APPDATA%/terraform.d/plugins/` if it doesn't exist yet.
 * Copy `terraform-provider-xiiot.exe` in the `%APPDATA%/terraform.d/plugins/` folder.
 
 Alternatively, you can simply run `plugin.bat` from this repository.
 
-### Configure credentials (and endpoint)
+On linux :
+* TODO
 
-The safer way to configure credentials is to use environment variables. This limits the risks of accidentaly pushing your credentials in your scm repository.
+3. Configure credentials as explained in the [configuration example](sample/provider.tf)
+4. Run `terraform init` once, then use terraform as usual (`terraform plan`, `terraform apply`, etc...)
 
-On windows:
-
-```
-set XI_USER=email@domain.com
-set XI_PASSWORD=password
-
-REM you can customize Xi IoT REST api endpoint if needed (defaults to iot.nutanix.com if not specified)
-set XI_ENDPOINT=xi.endpoint.com
-```
-
-On linux & co:
-
-```
-export XI_USER=email@domain.com
-export XI_PASSWORD=password
-
-# you can customize Xi IoT REST api endpoint if needed (defaults to iot.nutanix.com if not specified)
-export XI_ENDPOINT=xi.endpoint.com
-```
-
-### Use terraform as usual
-
-Run `terraform init` once, then use `terraform plan`, `terraform apply`, etc... as usual.
-
-##Examples
+## Examples
 
 Resource configuration examples are available in the [sample](sample) folder.
 
