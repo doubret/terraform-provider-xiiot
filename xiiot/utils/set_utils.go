@@ -43,6 +43,21 @@ func Convert_set_to_categoryinfo_array(set *schema.Set) []*api_models.CategoryIn
 	return results
 }
 
+func Convert_categoryinfo_array_to_set(array []*api_models.CategoryInfo) []interface{} {
+	var results []interface{}
+
+	for _, item := range array {
+		raw := make(map[string]string)
+
+		raw["id"] = *item.ID
+		raw["value"] = *item.Value
+
+		results = append(results, raw)
+	}
+
+	return results
+}
+
 func Convert_set_to_projectuserinfo_array(set *schema.Set) []*api_models.ProjectUserInfo {
 	var results []*api_models.ProjectUserInfo
 

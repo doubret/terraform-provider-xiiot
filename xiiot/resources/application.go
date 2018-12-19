@@ -1,8 +1,6 @@
 package resources
 
 import (
-	"log"
-
 	api_operations "github.com/doubret/terraform-provider-xiiot/xiiot/client/client/operations"
 	api_models "github.com/doubret/terraform-provider-xiiot/xiiot/client/models"
 	"github.com/doubret/terraform-provider-xiiot/xiiot/configuration"
@@ -41,7 +39,7 @@ func XiIoTApplication() *schema.Resource {
 				},
 				Optional: true,
 			},
-			"edge_selectors": &schema.Schema{
+			"edge_selector": &schema.Schema{
 				Type: schema.TypeSet,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
@@ -74,92 +72,67 @@ func getApplication(d *schema.ResourceData) *api_models.Application {
 		YamlData:      &yamlData,
 		ProjectID:     projectID,
 		EdgeIds:       utils.Convert_set_to_string_array(d.Get("edge_ids").(*schema.Set)),
-		EdgeSelectors: utils.Convert_set_to_categoryinfo_array(d.Get("edge_selectors").(*schema.Set)),
+		EdgeSelectors: utils.Convert_set_to_categoryinfo_array(d.Get("edge_selector").(*schema.Set)),
 	}
 
 	return &resource
 }
 
-// func setApplication(d *schema.ResourceData, resource *api_models.Application) {
-// 	d.Set("name", resource.Name)
-// 	d.Set("description", resource.Description)
-// 	d.Set("yaml_data", resource.YamlData)
-// 	d.Set("project_id", resource.ProjectID)
-// 	d.Set("edge_ids", resource.EdgeIds)
-// 	// EdgeSelectors
-// 	d.SetId(resource.ID)
-// }
+func setApplication(d *schema.ResourceData, resource *api_models.Application) {
+	d.Set("name", resource.Name)
+	d.Set("description", resource.Description)
+	d.Set("yaml_data", resource.YamlData)
+	d.Set("project_id", resource.ProjectID)
+	d.Set("edge_ids", resource.EdgeIds)
+	d.Set("edge_selector", utils.Convert_categoryinfo_array_to_set(resource.EdgeSelectors))
+}
 
 func createApplication(d *schema.ResourceData, meta interface{}) error {
-	log.Printf("[DEBUG] xiiot-provider: In createApplication")
-
 	config := meta.(configuration.Configuration)
 
-	model := getApplication(d)
-	result, err := config.Client.Operations.ApplicationCreate(api_operations.NewApplicationCreateParams().WithBody(model), config.Auth)
+	result, err := config.Client.Operations.ApplicationCreate(api_operations.NewApplicationCreateParams().WithBody(getApplication(d)), config.Auth)
 
 	if err != nil {
-		log.Print("Failed to create resource : ", err)
-
 		return err
 	}
 
 	d.SetId(*result.Payload.ID)
 
-	return nil
+	return readApplication(d, meta)
 }
 
 func readApplication(d *schema.ResourceData, meta interface{}) error {
-	// 	log.Printf("[DEBUG] xiiot-provider: In readApplication")
+	config := meta.(configuration.Configuration)
 
-	// 	id := d.Id()
+	model, err := config.Client.Operations.ApplicationGet(api_operations.NewApplicationGetParams().WithID(d.Id()), config.Auth)
 
-	// 	config := meta.(configuration.Configuration)
+	if err != nil {
+		return err
+	}
 
-	// 	model, err := config.Client.Operations.ApplicationGet(api_operations.NewApplicationGetParams().WithID(id), config.Auth)
-
-	// 	if err != nil {
-	// 		log.Print("Failed to read resource : ", err)
-
-	// 		return err
-	// 	}
-
-	// 	setApplication(d, model.Payload)
+	setApplication(d, model.Payload)
 
 	return nil
 }
 
 func updateApplication(d *schema.ResourceData, meta interface{}) error {
-	log.Printf("[DEBUG] xiiot-provider: In updateApplication")
-
 	config := meta.(configuration.Configuration)
 
-	model := getApplication(d)
-	result, err := config.Client.Operations.ApplicationUpdateV2(api_operations.NewApplicationUpdateV2Params().WithBody(model), config.Auth)
+	_, err := config.Client.Operations.ApplicationUpdateV2(api_operations.NewApplicationUpdateV2Params().WithBody(getApplication(d)), config.Auth)
 
 	if err != nil {
-		log.Print("Failed to update resource : ", err)
-
 		return err
 	}
 
-	d.SetId(*result.Payload.ID)
-
-	return nil
+	return readApplication(d, meta)
 }
 
 func deleteApplication(d *schema.ResourceData, meta interface{}) error {
-	log.Printf("[DEBUG] xiiot-provider: In deleteApplication")
-
-	id := d.Id()
-
 	config := meta.(configuration.Configuration)
 
-	_, err := config.Client.Operations.ApplicationDelete(api_operations.NewApplicationDeleteParams().WithID(id), config.Auth)
+	_, err := config.Client.Operations.ApplicationDelete(api_operations.NewApplicationDeleteParams().WithID(d.Id()), config.Auth)
 
 	if err != nil {
-		log.Print("Failed to delete resource : ", err)
-
 		return err
 	}
 
