@@ -1,8 +1,6 @@
 package resources
 
 import (
-	"log"
-
 	api_operations "github.com/doubret/terraform-provider-xiiot/xiiot/client/client/operations"
 	api_models "github.com/doubret/terraform-provider-xiiot/xiiot/client/models"
 	"github.com/doubret/terraform-provider-xiiot/xiiot/configuration"
@@ -58,7 +56,7 @@ func XiIoTEdge() *schema.Resource {
 				Type:     schema.TypeBool,
 				Optional: true,
 			},
-			"labels": &schema.Schema{
+			"label": &schema.Schema{
 				Type: schema.TypeSet,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
@@ -102,94 +100,72 @@ func getEdge(d *schema.ResourceData) *api_models.Edge {
 		StorageUsage:    &storageUsage,
 		Subnet:          &subnet,
 		Connected:       connected,
-		Labels:          utils.Convert_set_to_categoryinfo_array(d.Get("labels").(*schema.Set)),
+		Labels:          utils.Convert_set_to_categoryinfo_array(d.Get("label").(*schema.Set)),
 	}
 
 	return &resource
 }
 
-// func setEdge(d *schema.ResourceData, resource *api_models.Edge) {
-// 	d.Set("name", resource.Name)
-// 	d.Set("description", resource.Description)
-// 	d.Set("cloud_credential_ids", resource.CloudCredentialIds)
-// 	d.Set("docker_profile_ids", resource.DockerProfileIds)
-// 	d.Set("edge_ids", resource.EdgeIds)
-// 	d.Set("edge_selector_type", resource.EdgeSelectorType)
-// 	// Users
-// 	// EdgeSelectors
-// 	d.SetId(resource.ID)
-// }
+func setEdge(d *schema.ResourceData, resource *api_models.Edge) {
+	d.Set("name", resource.Name)
+	d.Set("description", resource.Description)
+	d.Set("edge_devices", resource.EdgeDevices)
+	d.Set("gateway", resource.Gateway)
+	d.Set("ip_address", resource.IPAddress)
+	d.Set("serial_number", resource.SerialNumber)
+	d.Set("storage_capacity", resource.StorageCapacity)
+	d.Set("storage_usage", resource.StorageUsage)
+	d.Set("subnet", resource.Subnet)
+	d.Set("connected", resource.Connected)
+	d.Set("label", utils.Convert_categoryinfo_array_to_set(resource.Labels))
+}
 
 func createEdge(d *schema.ResourceData, meta interface{}) error {
-	log.Printf("[DEBUG] xiiot-provider: In createEdge")
-
 	config := meta.(configuration.Configuration)
 
-	model := getEdge(d)
-	result, err := config.Client.Operations.EdgeCreate(api_operations.NewEdgeCreateParams().WithBody(model), config.Auth)
+	result, err := config.Client.Operations.EdgeCreate(api_operations.NewEdgeCreateParams().WithBody(getEdge(d)), config.Auth)
 
 	if err != nil {
-		log.Print("Failed to create resource : ", err)
-
 		return err
 	}
 
 	d.SetId(*result.Payload.ID)
 
-	return nil
+	return readEdge(d, meta)
 }
 
 func readEdge(d *schema.ResourceData, meta interface{}) error {
-	// 	log.Printf("[DEBUG] xiiot-provider: In readEdge")
+	config := meta.(configuration.Configuration)
 
-	// 	id := d.Id()
+	resource, err := config.Client.Operations.EdgeGet(api_operations.NewEdgeGetParams().WithEdgeID(d.Id()), config.Auth)
 
-	// 	config := meta.(configuration.Configuration)
+	if err != nil {
+		return err
+	}
 
-	// 	model, err := config.Client.Operations.EdgeGet(api_operations.NewEdgeGetParams().WithEdgeID(id), config.Auth)
-
-	// 	if err != nil {
-	// 		log.Print("Failed to read resource : ", err)
-
-	// 		return err
-	// 	}
-
-	// 	setEdge(d, model.Payload)
+	setEdge(d, resource.Payload)
 
 	return nil
 }
 
 func updateEdge(d *schema.ResourceData, meta interface{}) error {
-	log.Printf("[DEBUG] xiiot-provider: In updateEdge")
-
 	config := meta.(configuration.Configuration)
 
-	model := getEdge(d)
-	result, err := config.Client.Operations.EdgeUpdateV2(api_operations.NewEdgeUpdateV2Params().WithBody(model), config.Auth)
+	_, err := config.Client.Operations.EdgeUpdateV2(api_operations.NewEdgeUpdateV2Params().WithBody(getEdge(d)), config.Auth)
 
 	if err != nil {
-		log.Print("Failed to update resource : ", err)
-
 		return err
 	}
 
-	d.SetId(*result.Payload.ID)
-
-	return nil
+	return readEdge(d, meta)
 }
 
 func deleteEdge(d *schema.ResourceData, meta interface{}) error {
-	log.Printf("[DEBUG] xiiot-provider: In deleteEdge")
-
-	id := d.Id()
-
 	config := meta.(configuration.Configuration)
 
-	_, err := config.Client.Operations.EdgeDelete(api_operations.NewEdgeDeleteParams().WithEdgeID(id), config.Auth)
+	_, err := config.Client.Operations.EdgeDelete(api_operations.NewEdgeDeleteParams().WithEdgeID(d.Id()), config.Auth)
 
 	if err != nil {
-		log.Print("Failed to delete resource : ", err)
-
 		return err
 	}
 
