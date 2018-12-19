@@ -9,9 +9,26 @@ It uses the Xi IoT REST api to manage resources.
 
 The REST api client is automatically generated using [go-swagger](https://github.com/go-swagger/go-swagger).
 
-## Requirement
+## Build
 
-* [hashicorp/terraform](https://github.com/hashicorp/terraform)
+For now, building from sources is the only way to get the binaries for this provider.
+
+### Assumption
+
+* You have (some) experience with the Go language and its code organization.
+
+1. Install GO tools from https://golang.org/dl/
+2. Check out this repository: `git clone https://github.com/doubret/terraform-provider-xiiot.git` in your GO workspace
+3. Get dependencies
+```
+go get github.com/hashicorp/terraform
+go get github.com/go-swagger/go-swagger
+```
+4. Generate api client
+```
+swagger generate client -f https://iot.nutanix.com/swagger.json -A xiClient
+```
+5. Build with `go build` or `go install`
 
 ## Usage
 
@@ -53,13 +70,6 @@ export XI_ENDPOINT=xi.endpoint.com
 ### Use terraform as usual
 
 Run `terraform init` once, then use `terraform plan`, `terraform apply`, etc... as usual.
-
-## Build from sources
-
-TODO
-* go get list
-* build api client
-* ...
 
 ## Provider configuration
 
