@@ -104,13 +104,13 @@ func createApplication(d *schema.ResourceData, meta interface{}) error {
 func readApplication(d *schema.ResourceData, meta interface{}) error {
 	config := meta.(configuration.Configuration)
 
-	model, err := config.Client.Operations.ApplicationGet(api_operations.NewApplicationGetParams().WithID(d.Id()), config.Auth)
+	resource, err := config.Client.Operations.ApplicationGet(api_operations.NewApplicationGetParams().WithID(d.Id()), config.Auth)
 
 	if err != nil {
 		return err
 	}
 
-	setApplication(d, model.Payload)
+	setApplication(d, resource.Payload)
 
 	return nil
 }

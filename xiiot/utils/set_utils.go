@@ -75,3 +75,18 @@ func Convert_set_to_projectuserinfo_array(set *schema.Set) []*api_models.Project
 
 	return results
 }
+
+func Convert_projectuserinfo_array_to_set(array []*api_models.ProjectUserInfo) []interface{} {
+	var results []interface{}
+
+	for _, item := range array {
+		raw := make(map[string]string)
+
+		raw["user_id"] = *item.UserID
+		raw["role"] = *item.Role
+
+		results = append(results, raw)
+	}
+
+	return results
+}
