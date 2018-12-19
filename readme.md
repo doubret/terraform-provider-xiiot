@@ -17,8 +17,10 @@ For now, building from sources is the only way to get the binaries for this prov
 
 * You have (some) experience with the Go language and its code organization.
 
+### Build steps
+
 1. Install GO tools from https://golang.org/dl/
-2. Check out this repository: `git clone https://github.com/doubret/terraform-provider-xiiot.git` in your GO workspace
+2. Check out this repository: `git clone https://github.com/doubret/terraform-provider-xiiot.git`
 3. Get dependencies
 ```
 go get github.com/hashicorp/terraform
@@ -43,7 +45,7 @@ Install terraform as explained [here](https://learn.hashicorp.com/terraform/gett
 
 Alternatively, you can simply run `plugin.bat` from this repository.
 
-### Configure credentials
+### Configure credentials (and endpoint)
 
 The safer way to configure credentials is to use environment variables. This limits the risks of accidentaly pushing your credentials in your scm repository.
 
@@ -70,6 +72,21 @@ export XI_ENDPOINT=xi.endpoint.com
 ### Use terraform as usual
 
 Run `terraform init` once, then use `terraform plan`, `terraform apply`, etc... as usual.
+
+##Examples
+
+Resource configuration examples are available in the [sample](sample) folder.
+
+* [xiiot_application](sample/application.tf)
+* [xiiot_category](sample/category.tf)
+* [xiiot_cloudcreds](sample/cloudcreds.tf)
+* [xiiot_containerregistry](sample/containerregistry.tf)
+* [xiiot_dockerprofile](sample/dockerprofile.tf)
+* [xiiot_edge](sample/edge.tf)
+* [xiiot_project](sample/project.tf)
+* [xiiot_sensor](sample/sensor.tf)
+
+A provider configuration example is also [available](sample/provider.tf).
 
 ## Provider configuration
 
