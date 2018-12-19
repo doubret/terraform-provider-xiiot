@@ -1,7 +1,5 @@
 .terraform/
 *.exe
-*.tf
 *.log
 *.tfstate
 *.backup
-*.tf_
