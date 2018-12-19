@@ -7,13 +7,13 @@ import (
 	"github.com/hashicorp/terraform/helper/schema"
 )
 
-func XiIoTCloudCredGcp() *schema.Resource {
+func XiIoTCloudCredsGcp() *schema.Resource {
 	return &schema.Resource{
 		SchemaVersion: 1,
-		Create:        createCloudCredGcp,
-		Read:          readCloudCredGcp,
-		Update:        updateCloudCredGcp,
-		Delete:        deleteCloudCredGcp,
+		Create:        createCloudCredsGcp,
+		Read:          readCloudCredsGcp,
+		Update:        updateCloudCredsGcp,
+		Delete:        deleteCloudCredsGcp,
 		Schema: map[string]*schema.Schema{
 			"name": &schema.Schema{
 				Type:     schema.TypeString,
@@ -67,7 +67,7 @@ func XiIoTCloudCredGcp() *schema.Resource {
 	}
 }
 
-func getCloudCredGcp(d *schema.ResourceData) *api_models.CloudCreds {
+func getCloudCredsGcp(d *schema.ResourceData) *api_models.CloudCreds {
 	name := d.Get("name").(string)
 	description := d.Get("description").(string)
 	credType := "GCP"
@@ -104,7 +104,7 @@ func getCloudCredGcp(d *schema.ResourceData) *api_models.CloudCreds {
 	return &resource
 }
 
-func setCloudCredGcp(d *schema.ResourceData, resource *api_models.CloudCreds) {
+func setCloudCredsGcp(d *schema.ResourceData, resource *api_models.CloudCreds) {
 	d.Set("name", resource.Name)
 	d.Set("description", resource.Description)
 	d.Set("auth_provider_x509_cert_url", resource.GcpCredential.AuthProviderX509CertURL)
@@ -119,10 +119,10 @@ func setCloudCredGcp(d *schema.ResourceData, resource *api_models.CloudCreds) {
 	d.Set("type", resource.GcpCredential.Type)
 }
 
-func createCloudCredGcp(d *schema.ResourceData, meta interface{}) error {
+func createCloudCredsGcp(d *schema.ResourceData, meta interface{}) error {
 	config := meta.(configuration.Configuration)
 
-	result, err := config.Client.Operations.CloudCredsCreate(api_operations.NewCloudCredsCreateParams().WithBody(getCloudCredGcp(d)), config.Auth)
+	result, err := config.Client.Operations.CloudCredsCreate(api_operations.NewCloudCredsCreateParams().WithBody(getCloudCredsGcp(d)), config.Auth)
 
 	if err != nil {
 		return err
@@ -130,10 +130,10 @@ func createCloudCredGcp(d *schema.ResourceData, meta interface{}) error {
 
 	d.SetId(*result.Payload.ID)
 
-	return readCloudCredGcp(d, meta)
+	return readCloudCredsGcp(d, meta)
 }
 
-func readCloudCredGcp(d *schema.ResourceData, meta interface{}) error {
+func readCloudCredsGcp(d *schema.ResourceData, meta interface{}) error {
 	config := meta.(configuration.Configuration)
 
 	model, err := config.Client.Operations.CloudCredsGet(api_operations.NewCloudCredsGetParams().WithID(d.Id()), config.Auth)
@@ -142,24 +142,24 @@ func readCloudCredGcp(d *schema.ResourceData, meta interface{}) error {
 		return err
 	}
 
-	setCloudCredGcp(d, model.Payload)
+	setCloudCredsGcp(d, model.Payload)
 
 	return nil
 }
 
-func updateCloudCredGcp(d *schema.ResourceData, meta interface{}) error {
+func updateCloudCredsGcp(d *schema.ResourceData, meta interface{}) error {
 	config := meta.(configuration.Configuration)
 
-	_, err := config.Client.Operations.CloudCredsUpdateV2(api_operations.NewCloudCredsUpdateV2Params().WithBody(getCloudCredGcp(d)), config.Auth)
+	_, err := config.Client.Operations.CloudCredsUpdateV2(api_operations.NewCloudCredsUpdateV2Params().WithBody(getCloudCredsGcp(d)), config.Auth)
 
 	if err != nil {
 		return err
 	}
 
-	return readCloudCredGcp(d, meta)
+	return readCloudCredsGcp(d, meta)
 }
 
-func deleteCloudCredGcp(d *schema.ResourceData, meta interface{}) error {
+func deleteCloudCredsGcp(d *schema.ResourceData, meta interface{}) error {
 	config := meta.(configuration.Configuration)
 
 	_, err := config.Client.Operations.CloudCredsDelete(api_operations.NewCloudCredsDeleteParams().WithID(d.Id()), config.Auth)

@@ -7,13 +7,13 @@ import (
 	"github.com/hashicorp/terraform/helper/schema"
 )
 
-func XiIoTCloudCredAws() *schema.Resource {
+func XiIoTCloudCredsAws() *schema.Resource {
 	return &schema.Resource{
 		SchemaVersion: 1,
-		Create:        createCloudCredAws,
-		Read:          readCloudCredAws,
-		Update:        updateCloudCredAws,
-		Delete:        deleteCloudCredAws,
+		Create:        createCloudCredsAws,
+		Read:          readCloudCredsAws,
+		Update:        updateCloudCredsAws,
+		Delete:        deleteCloudCredsAws,
 		Schema: map[string]*schema.Schema{
 			"name": &schema.Schema{
 				Type:     schema.TypeString,
@@ -35,7 +35,7 @@ func XiIoTCloudCredAws() *schema.Resource {
 	}
 }
 
-func getCloudCredAws(d *schema.ResourceData) *api_models.CloudCreds {
+func getCloudCredsAws(d *schema.ResourceData) *api_models.CloudCreds {
 	name := d.Get("name").(string)
 	description := d.Get("description").(string)
 	credType := "AWS"
@@ -56,17 +56,17 @@ func getCloudCredAws(d *schema.ResourceData) *api_models.CloudCreds {
 	return &resource
 }
 
-func setCloudCredAws(d *schema.ResourceData, resource *api_models.CloudCreds) {
+func setCloudCredsAws(d *schema.ResourceData, resource *api_models.CloudCreds) {
 	d.Set("name", resource.Name)
 	d.Set("description", resource.Description)
 	d.Set("access_key", resource.AwsCredential.AccessKey)
 	d.Set("secret_key", resource.AwsCredential.Secret)
 }
 
-func createCloudCredAws(d *schema.ResourceData, meta interface{}) error {
+func createCloudCredsAws(d *schema.ResourceData, meta interface{}) error {
 	config := meta.(configuration.Configuration)
 
-	result, err := config.Client.Operations.CloudCredsCreate(api_operations.NewCloudCredsCreateParams().WithBody(getCloudCredAws(d)), config.Auth)
+	result, err := config.Client.Operations.CloudCredsCreate(api_operations.NewCloudCredsCreateParams().WithBody(getCloudCredsAws(d)), config.Auth)
 
 	if err != nil {
 		return err
@@ -74,10 +74,10 @@ func createCloudCredAws(d *schema.ResourceData, meta interface{}) error {
 
 	d.SetId(*result.Payload.ID)
 
-	return readCloudCredAws(d, meta)
+	return readCloudCredsAws(d, meta)
 }
 
-func readCloudCredAws(d *schema.ResourceData, meta interface{}) error {
+func readCloudCredsAws(d *schema.ResourceData, meta interface{}) error {
 	config := meta.(configuration.Configuration)
 
 	resource, err := config.Client.Operations.CloudCredsGet(api_operations.NewCloudCredsGetParams().WithID(d.Id()), config.Auth)
@@ -86,24 +86,24 @@ func readCloudCredAws(d *schema.ResourceData, meta interface{}) error {
 		return err
 	}
 
-	setCloudCredAws(d, resource.Payload)
+	setCloudCredsAws(d, resource.Payload)
 
 	return nil
 }
 
-func updateCloudCredAws(d *schema.ResourceData, meta interface{}) error {
+func updateCloudCredsAws(d *schema.ResourceData, meta interface{}) error {
 	config := meta.(configuration.Configuration)
 
-	_, err := config.Client.Operations.CloudCredsUpdateV2(api_operations.NewCloudCredsUpdateV2Params().WithBody(getCloudCredAws(d)), config.Auth)
+	_, err := config.Client.Operations.CloudCredsUpdateV2(api_operations.NewCloudCredsUpdateV2Params().WithBody(getCloudCredsAws(d)), config.Auth)
 
 	if err != nil {
 		return err
 	}
 
-	return readCloudCredAws(d, meta)
+	return readCloudCredsAws(d, meta)
 }
 
-func deleteCloudCredAws(d *schema.ResourceData, meta interface{}) error {
+func deleteCloudCredsAws(d *schema.ResourceData, meta interface{}) error {
 	config := meta.(configuration.Configuration)
 
 	_, err := config.Client.Operations.CloudCredsDelete(api_operations.NewCloudCredsDeleteParams().WithID(d.Id()), config.Auth)

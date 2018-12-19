@@ -1,8 +1,6 @@
 package resources
 
 import (
-	"log"
-
 	api_operations "github.com/doubret/terraform-provider-xiiot/xiiot/client/client/operations"
 	api_models "github.com/doubret/terraform-provider-xiiot/xiiot/client/models"
 	"github.com/doubret/terraform-provider-xiiot/xiiot/configuration"
@@ -87,79 +85,54 @@ func setContainerRegistry(d *schema.ResourceData, resource *api_models.Container
 	d.Set("email", resource.Email)
 	d.Set("pwd", resource.Pwd)
 	d.Set("cloud_creds_id", resource.CloudCredsID)
-	d.SetId(resource.ID)
 }
 
 func createContainerRegistry(d *schema.ResourceData, meta interface{}) error {
-	log.Printf("[DEBUG] xiiot-provider: In createContainerRegistry")
-
 	config := meta.(configuration.Configuration)
 
-	model := getContainerRegistry(d)
-	_, err := config.Client.Operations.ContainerRegistryCreate(api_operations.NewContainerRegistryCreateParams().WithBody(model), config.Auth)
+	result, err := config.Client.Operations.ContainerRegistryCreate(api_operations.NewContainerRegistryCreateParams().WithBody(getContainerRegistry(d)), config.Auth)
 
 	if err != nil {
-		log.Print("Failed to create resource : ", err)
-
 		return err
 	}
 
-	setContainerRegistry(d, model)
+	d.SetId(*result.Payload.ID)
 
-	return nil
+	return readContainerRegistry(d, meta)
 }
 
 func readContainerRegistry(d *schema.ResourceData, meta interface{}) error {
-	log.Printf("[DEBUG] xiiot-provider: In readContainerRegistry")
-
-	id := d.Id()
-
 	config := meta.(configuration.Configuration)
 
-	model, err := config.Client.Operations.ContainerRegistryGet(api_operations.NewContainerRegistryGetParams().WithID(id), config.Auth)
+	resource, err := config.Client.Operations.ContainerRegistryGet(api_operations.NewContainerRegistryGetParams().WithID(d.Id()), config.Auth)
 
 	if err != nil {
-		log.Print("Failed to get resource : ", err)
-
 		return err
 	}
 
-	setContainerRegistry(d, model.Payload)
+	setContainerRegistry(d, resource.Payload)
 
 	return nil
 }
 
 func updateContainerRegistry(d *schema.ResourceData, meta interface{}) error {
-	log.Printf("[DEBUG] xiiot-provider: In updateContainerRegistry")
-
 	config := meta.(configuration.Configuration)
 
-	model := getContainerRegistry(d)
-	_, err := config.Client.Operations.ContainerRegistryUpdate(api_operations.NewContainerRegistryUpdateParams().WithBody(model), config.Auth)
+	_, err := config.Client.Operations.ContainerRegistryUpdate(api_operations.NewContainerRegistryUpdateParams().WithBody(getContainerRegistry(d)), config.Auth)
 
 	if err != nil {
-		log.Print("Failed to update resource : ", err)
-
 		return err
 	}
 
-	setContainerRegistry(d, model)
-
-	return nil
+	return readContainerRegistry(d, meta)
 }
 
 func deleteContainerRegistry(d *schema.ResourceData, meta interface{}) error {
-	log.Printf("[DEBUG] xiiot-provider: In deleteContainerRegistry")
-
-	id := d.Id()
-
 	config := meta.(configuration.Configuration)
 
-	_, err := config.Client.Operations.ContainerRegistryDelete(api_operations.NewContainerRegistryDeleteParams().WithID(id), config.Auth)
+	_, err := config.Client.Operations.ContainerRegistryDelete(api_operations.NewContainerRegistryDeleteParams().WithID(d.Id()), config.Auth)
 
 	if err != nil {
-		log.Print("Failed to delete resource : ", err)
-
 		return err
 	}
 
