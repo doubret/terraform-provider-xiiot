@@ -50,8 +50,20 @@ swagger generate client -f https://iot.nutanix.com/swagger.json -A xiClient
   - Alternatively, you can simply run `plugin.bat` from this repository.
 2.2. On linux :
   - TODO
-3. Configure credentials as explained in the [configuration example](sample/provider.tf)
+3. Configure credentials as explained [here](docs/provider.tf).
 4. Run `terraform init` once, then use terraform as usual (`terraform plan`, `terraform apply`, etc...)
+
+## Reference documentation
+
+* [provider](docs/provider.tf)
+* [application](docs/application.tf)
+* [category](docs/category.tf)
+* [cloudcreds](docs/cloudcreds.tf)
+* [containerregistry](docs/containerregistry.tf)
+* [dockerprofile](docs/dockerprofile.tf)
+* [edge](docs/edge.tf)
+* [project](docs/project.tf)
+* [sensor](docs/sensor.tf)
 
 ## Examples
 
@@ -67,6 +79,7 @@ Resource configuration examples are available in the [sample](sample) folder.
 * [xiiot_sensor](sample/sensor.tf)
 
 A provider configuration example is also [available](sample/provider.tf).
+
 
 ## Provider configuration
 
