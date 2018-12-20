@@ -1,7 +1,7 @@
 resource "xiiot_project" "project" {
   name                          = "name"
   description                   = "description"
-  cloud_credential_ids          = [ "${xiiot_cloudcredsgcp.cloudcredsgcp.id}" ]
+  cloud_credential_ids          = [ "${xiiot_cloudcreds_gcp.cloudcredsgcp.id}" ]
   docker_profile_ids            = [ "${xiiot_dockerprofile.dockerprofile.id}" ]
   edge_ids                      = [ "${xiiot_edge.edge.id}" ]
   edge_selector_type            = "Explicit"

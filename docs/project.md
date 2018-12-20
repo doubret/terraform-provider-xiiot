@@ -59,3 +59,6 @@ resource "xiiot_project" "project" {
 * __edge_selector__ (_Optional_)
   * Type: set of [catgory_info](category_info.md)
   * Only relevant when parent project edge selector type = 'Category'.
+* __user__ (_Optional_)
+  * Type: set of [project_user_info](project_user_info.md)
+  * List of info of users who have access to this project.

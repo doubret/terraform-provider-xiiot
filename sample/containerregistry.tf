@@ -6,5 +6,5 @@ resource "xiiot_containerregistry" "containerregistry" {
   user_name                     = "user_name"
   email                         = "email"
   pwd                           = "pwd"
-  cloud_creds_id                = "${xiiot_cloudcredsgcp.cloudcredsgcp.id}"
+  cloud_creds_id                = "${xiiot_cloudcreds_gcp.cloudcredsgcp.id}"
 }
