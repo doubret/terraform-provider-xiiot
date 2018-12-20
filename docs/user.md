@@ -19,18 +19,18 @@ resource "xiiot_user" "admin" {
 
 * __id__ (_Computed_)
   * Type: string
-  * Id of the resource, this is the id for both terraform and Xi IoT.
+  * Id of the resource, this is the id for both terraform and Xi IoT
 * __name__ (_Required_)
   * Type: string
-  * User name.
+  * User name
 * __email__ (_Required_)
   * Type: string
-  * User email.
+  * User email
 * __password__ (_Required_)
   * Type: string
-  * User password.
+  * User password
   * TODO : say something about the clear text vs sha-256
 * __role__ (_Optional_)
   * Type: string
   * Allowed values: INFRA_ADMIN, USER
-  * User role.
+  * User role

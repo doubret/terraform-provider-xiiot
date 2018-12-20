@@ -6,7 +6,7 @@
 
 * __id__ (_Required_)
   * Type: string
-  * Id of the category.
+  * Id of the category
 * __value__ (_Required_)
   * Type: string
-  * Value of the category.
+  * Value of the category

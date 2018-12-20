@@ -24,32 +24,32 @@ resource "xiiot_dockerprofile" "dockerprofile" {
 
 * __id__ (_Computed_)
   * Type: string
-  * Id of the resource, this is the id for both terraform and Xi IoT.
+  * Id of the resource, this is the id for both terraform and Xi IoT
 * __name__ (_Required_)
   * Type: string
-  * Docker profile name.
+  * Docker profile name
 * __description__ (_Optional_)
   * Type: string
-  * Docker profile description.
+  * Docker profile description
 * __type__ (_Required_)
   * Type: string
   * Allowed value : AWS, GCP, Azure, ContainerRegistry
-  * Docker profile type.
+  * Docker profile type
 * __server__ (_Required_)
   * Type: string
-  * Docker profile server.
+  * Docker profile server
 * __user_name__ (_Optional_)
   * Type: string
-  * Docker profile user name (required if type == ContainerRegistry).
+  * Docker profile user name (required if type == ContainerRegistry)
 * __email__ (_Optional_)
   * Type: string
-  * Docker profile email (required if type == ContainerRegistry).
+  * Docker profile email (required if type == ContainerRegistry)
 * __pwd__ (_Optional_)
   * Type: string
-  * Docker profile password (required if type == ContainerRegistry).
+  * Docker profile password (required if type == ContainerRegistry)
 * __cloud_creds_id__ (_Optional_)
   * Type: string
-  * The cloud creds to import docker profile profile from (required if type == AWS || Type == GCP).
+  * The cloud creds to import docker profile profile from (required if type == AWS || Type == GCP)
 * __credentials__ (_Optional_)
   * Type: string
-  * Credentials of the docker profile.
+  * Credentials of the docker profile

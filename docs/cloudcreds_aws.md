@@ -19,16 +19,16 @@ resource "xiiot_cloudcredsaws" "cloudcredsaws" {
 
 * __id__ (_Computed_)
   * Type: string
-  * Id of the resource, this is the id for both terraform and Xi IoT.
+  * Id of the resource, this is the id for both terraform and Xi IoT
 * __name__ (_Required_)
   * Type: string
-  * Cloudcreds name.
+  * Cloudcreds name
 * __description__ (_Optional_)
   * Type: string
-  * Cloudcreds description.
+  * Cloudcreds description
 * __access_key__ (_Required_)
   * Type: string
-  * AWS credentials access key.
+  * AWS credentials access key
 * __secret_key__ (_Required_)
   * Type: string
-  * AWS credentials secret key.
+  * AWS credentials secret key

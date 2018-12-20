@@ -18,13 +18,13 @@ resource "xiiot_category" "category" {
 
 * __id__ (_Computed_)
   * Type: string
-  * Id of the resource, this is the id for both terraform and Xi IoT.
+  * Id of the resource, this is the id for both terraform and Xi IoT
 * __name__ (_Required_)
   * Type: string
-  * Name of the category.
+  * Name of the category
 * __purpose__ (_Required_)
   * Type: string
-  * Purpose of the category.
+  * Purpose of the category
 * __values__ (_Required_)
   * Type: set of strings
-  * Values supported by the categoy.
+  * Values supported by the categoy

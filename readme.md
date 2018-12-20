@@ -4,19 +4,19 @@
 
 ## Description
 
-This project is a terraform custom provider for Nutanix Xi IoT.
+This project is a terraform custom provider for Nutanix Xi IoT
 
-It uses the [Xi IoT REST api](https://iot.nutanix.com/docs/) to manage resources.
+It uses the [Xi IoT REST api](https://iot.nutanix.com/docs/) to manage resources
 
-The REST api client is automatically generated using [go-swagger](https://github.com/go-swagger/go-swagger).
+The REST api client is automatically generated using [go-swagger](https://github.com/go-swagger/go-swagger)
 
 ## Build
 
-For now, building from sources is the only way to get the binaries for this provider.
+For now, building from sources is the only way to get the binaries for this provider
 
 ### Assumption
 
-* You have (some) experience with the Go language and its code organization.
+* You have (some) experience with the Go language and its code organization
 
 ### Build steps
 
@@ -43,10 +43,10 @@ swagger generate client -f https://iot.nutanix.com/swagger.json -A xiClient
 
 ## Usage
 
-1. Install terraform. ([link](https://learn.hashicorp.com/terraform/getting-started/install))
-2. Build the provider from sources and copy it in the terraform plugins folder. ([here](https://www.terraform.io/docs/plugins/basics.html))
-3. Configure credentials. ([link](docs/provider.md))
-4. Run `terraform init` once, then use terraform as usual (`terraform plan`, `terraform apply`, etc...).
+1. Install terraform ([link](https://learn.hashicorp.com/terraform/getting-started/install))
+2. Build the provider from sources and copy it in the terraform plugins folder ([link](https://www.terraform.io/docs/plugins/basics.html))
+3. Configure credentials ([link](docs/provider.md))
+4. Run `terraform init` once, then use terraform as usual (`terraform plan`, `terraform apply`, etc...)
 
 ## Reference documentation
 
@@ -63,7 +63,7 @@ swagger generate client -f https://iot.nutanix.com/swagger.json -A xiClient
 
 ## Examples
 
-Resource configuration examples are available in the [sample](sample) folder.
+Resource configuration examples are available in the [sample](sample) folder
 
 * [xiiot_application](sample/application.tf)
 * [xiiot_category](sample/category.tf)
@@ -75,4 +75,4 @@ Resource configuration examples are available in the [sample](sample) folder.
 * [xiiot_project](sample/project.tf)
 * [xiiot_sensor](sample/sensor.tf)
 
-A provider configuration example is also [available](sample/provider.tf).
+A provider configuration example is also [available](sample/provider.tf)

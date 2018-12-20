@@ -27,13 +27,13 @@ resource "xiiot_cloudcredsgcp" "cloudcredsgcp" {
 
 * __id__ (_Computed_)
   * Type: string
-  * Id of the resource, this is the id for both terraform and Xi IoT.
+  * Id of the resource, this is the id for both terraform and Xi IoT
 * __name__ (_Required_)
   * Type: string
-  * Cloudcreds name.
+  * Cloudcreds name
 * __description__ (_Optional_)
   * Type: string
-  * Cloudcreds description.
+  * Cloudcreds description
 * __auth_provider_x509_cert_url__ (_Required_)
   * Type: string
 * __auth_uri__ (_Required_)

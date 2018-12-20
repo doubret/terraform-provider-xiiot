@@ -17,10 +17,10 @@ resource "xiiot_sensor" "sensor" {
 
 * __id__ (_Computed_)
   * Type: string
-  * Id of the resource, this is the id for both terraform and Xi IoT.
+  * Id of the resource, this is the id for both terraform and Xi IoT
 * __edge_id__ (_Required_)
   * Type: string
-  * Id of the edge.
+  * Id of the edge
 * __topic_name__ (_Required_)
   * Type: string
-  * Name of the mqtt topic.
+  * Name of the mqtt topic

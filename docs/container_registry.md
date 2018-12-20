@@ -23,29 +23,29 @@ resource "xiiot_containerregistry" "containerregistry" {
 
 * __id__ (_Computed_)
   * Type: string
-  * Id of the resource, this is the id for both terraform and Xi IoT.
+  * Id of the resource, this is the id for both terraform and Xi IoT
 * __name__ (_Required_)
   * Type: string
-  * Container registry name.
+  * Container registry name
 * __description__ (_Optional_)
   * Type: string
-  * Container registry description.
+  * Container registry description
 * __type__ (_Required_)
   * Type: string
   * Allowed value : AWS, GCP, Azure, ContainerRegistry
-  * Container registry type.
+  * Container registry type
 * __server__ (_Required_)
   * Type: string
-  * Container registry server.
+  * Container registry server
 * __user_name__ (_Optional_)
   * Type: string
-  * Container registry user name (required if type == ContainerRegistry).
+  * Container registry user name (required if type == ContainerRegistry)
 * __email__ (_Optional_)
   * Type: string
-  * Container registry email (required if type == ContainerRegistry).
+  * Container registry email (required if type == ContainerRegistry)
 * __pwd__ (_Optional_)
   * Type: string
-  * Container registry password (required if type == ContainerRegistry).
+  * Container registry password (required if type == ContainerRegistry)
 * __cloud_creds_id__ (_Optional_)
   * Type: string
-  * The cloud creds to import container registry profile from (required if type == AWS || Type == GCP).
+  * The cloud creds to import container registry profile from (required if type == AWS || Type == GCP)

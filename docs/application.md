@@ -25,22 +25,22 @@ resource "xiiot_application" "application" {
 
 * __id__ (_Computed_)
   * Type: string
-  * Id of the resource, this is the id for both terraform and Xi IoT.
+  * Id of the resource, this is the id for both terraform and Xi IoT
 * __name__ (_Required_)
   * Type: string
-  * Application name.
+  * Application name
 * __description__ (_Optional_)
   * Type: string
-  * Application description.
+  * Application description
 * __yaml_data__ (_Required_)
   * Type: string
-  * Application manifest.
+  * Application manifest
 * __project_id__ (_Required_)
   * Type: string
-  * Id of the project the application is associated with.
+  * Id of the project the application is associated with
 * __edge_ids__ (_Optional_)
   * Type: set of strings
-  * List of ids of edges this application should be deployed to. Only relevant if parent project EdgeSelectorType = 'Explicit'.
+  * List of ids of edges this application should be deployed to. Only relevant if parent project EdgeSelectorType = 'Explicit'
 * __edge_selector__ (_Optional_)
   * Type: set of [catgory_info](category_info.md)
-  * Only relevant when parent project edge selector type = 'Category'.
+  * Only relevant when parent project edge selector type = 'Category'
