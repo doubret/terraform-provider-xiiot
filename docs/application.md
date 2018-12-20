@@ -42,5 +42,5 @@ resource "xiiot_application" "application" {
   * Type: set of strings
   * List of ids of edges this application should be deployed to. Only relevant if parent project EdgeSelectorType = 'Explicit'.
 * __edge_selector__ (_Optional_)
-  * Type: set of [catgory_info](catgory_info.md)
+  * Type: set of [catgory_info](category_info.md)
   * Edge selectors - CategoryInfo list. Only relevant when parent project EdgeSelectorType = 'Category'.
