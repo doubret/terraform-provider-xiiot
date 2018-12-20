@@ -44,13 +44,7 @@ swagger generate client -f https://iot.nutanix.com/swagger.json -A xiClient
 ## Usage
 
 1. Install terraform as explained [here](https://learn.hashicorp.com/terraform/getting-started/install)
-2. Build the provider from sources and copy it in the terraform plugins folder.
-2.1. On windows :
-  - Create folder `%APPDATA%/terraform.d/plugins/` if it doesn't exist yet.
-  - Copy `terraform-provider-xiiot.exe` in the `%APPDATA%/terraform.d/plugins/` folder.
-  - Alternatively, you can simply run `plugin.bat` from this repository.
-2.2. On linux :
-  - TODO
+2. Build the provider from sources and copy it in the terraform plugins folder as explained [here](https://www.terraform.io/docs/plugins/basics.html).
 3. Configure credentials as explained [here](docs/provider.tf).
 4. Run `terraform init` once, then use terraform as usual (`terraform plan`, `terraform apply`, etc...)
 
