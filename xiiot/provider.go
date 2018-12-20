@@ -1,7 +1,7 @@
 package xiiot
 
 import (
-	api_client "github.com/doubret/terraform-provider-xiiot/xiiot/client/client"
+	api_client "github.com/doubret/terraform-provider-xiiot/client"
 	"github.com/doubret/terraform-provider-xiiot/xiiot/configuration"
 	"github.com/doubret/terraform-provider-xiiot/xiiot/resources"
 	"github.com/doubret/terraform-provider-xiiot/xiiot/utils"

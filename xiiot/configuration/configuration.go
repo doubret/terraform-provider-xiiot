@@ -1,7 +1,7 @@
 package configuration
 
 import (
-	api_client "github.com/doubret/terraform-provider-xiiot/xiiot/client/client"
+	api_client "github.com/doubret/terraform-provider-xiiot/client"
 	swagger_runtime "github.com/go-openapi/runtime"
 )
 

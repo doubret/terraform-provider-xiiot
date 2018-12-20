@@ -1,7 +1,7 @@
 package utils
 
 import (
-	api_models "github.com/doubret/terraform-provider-xiiot/xiiot/client/models"
+	api_models "github.com/doubret/terraform-provider-xiiot/models"
 	"github.com/hashicorp/terraform/helper/schema"
 )
 

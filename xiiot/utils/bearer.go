@@ -1,9 +1,9 @@
 package utils
 
 import (
-	api_client "github.com/doubret/terraform-provider-xiiot/xiiot/client/client"
-	api_operations "github.com/doubret/terraform-provider-xiiot/xiiot/client/client/operations"
-	api_models "github.com/doubret/terraform-provider-xiiot/xiiot/client/models"
+	api_client "github.com/doubret/terraform-provider-xiiot/client"
+	api_operations "github.com/doubret/terraform-provider-xiiot/client/operations"
+	api_models "github.com/doubret/terraform-provider-xiiot/models"
 	swagger_runtime "github.com/go-openapi/runtime"
 	swagger_client "github.com/go-openapi/runtime/client"
 	"log"

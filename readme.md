@@ -20,7 +20,7 @@ For now, building from sources is the only way to get the binaries for this prov
 ### Build steps
 
 1. Install Go tools from https://golang.org/dl/
-2. Check out this repository: `git clone https://github.com/doubret/terraform-provider-xiiot.git`
+2. Check out this repository `git clone https://github.com/doubret/terraform-provider-xiiot.git`
 3. Get dependencies
 ```
 go get github.com/hashicorp/terraform
@@ -55,15 +55,15 @@ swagger generate client -f https://iot.nutanix.com/swagger.json -A xiClient
 
 ## Reference documentation
 
-* [provider](docs/provider.tf)
-* [application](docs/application.tf)
-* [category](docs/category.tf)
-* [cloudcreds](docs/cloudcreds.tf)
-* [containerregistry](docs/containerregistry.tf)
-* [dockerprofile](docs/dockerprofile.tf)
-* [edge](docs/edge.tf)
-* [project](docs/project.tf)
-* [sensor](docs/sensor.tf)
+* [provider](docs/provider.md)
+* [application](docs/application.md)
+* [category](docs/category.md)
+* [cloudcreds](docs/cloudcreds.md)
+* [containerregistry](docs/containerregistry.md)
+* [dockerprofile](docs/dockerprofile.md)
+* [edge](docs/edge.md)
+* [project](docs/project.md)
+* [sensor](docs/sensor.md)
 
 ## Examples
 

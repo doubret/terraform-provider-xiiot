@@ -1,8 +1,8 @@
 package resources
 
 import (
-	api_operations "github.com/doubret/terraform-provider-xiiot/xiiot/client/client/operations"
-	api_models "github.com/doubret/terraform-provider-xiiot/xiiot/client/models"
+	api_operations "github.com/doubret/terraform-provider-xiiot/client/operations"
+	api_models "github.com/doubret/terraform-provider-xiiot/models"
 	"github.com/doubret/terraform-provider-xiiot/xiiot/configuration"
 	"github.com/hashicorp/terraform/helper/schema"
 )
