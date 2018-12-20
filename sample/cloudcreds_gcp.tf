@@ -1,4 +1,4 @@
-resource "xiiot_cloudcredsgcp" "cloudcredsgcp" {
+resource "xiiot_cloudcreds_gcp" "cloudcreds_gcp" {
   name                          = "name"
   description                   = "description"
 	auth_provider_x509_cert_url   = "auth_provider_x509_cert_url"

@@ -5,7 +5,8 @@
 ## Description
 
 This project is a terraform custom provider for Nutanix Xi IoT.
-It uses the Xi IoT REST api to manage resources.
+
+It uses the [Xi IoT REST api](https://iot.nutanix.com/docs/) to manage resources.
 
 The REST api client is automatically generated using [go-swagger](https://github.com/go-swagger/go-swagger).
 
@@ -58,10 +59,10 @@ swagger generate client -f https://iot.nutanix.com/swagger.json -A xiClient
 * [provider](docs/provider.md)
 * [application](docs/application.md)
 * [category](docs/category.md)
-* [cloudcredsaws](docs/cloudcredsaws.md)
-* [cloudcredsgcp](docs/cloudcredsgcp.md)
-* [containerregistry](docs/containerregistry.md)
-* [dockerprofile](docs/dockerprofile.md)
+* [cloudcreds aws](docs/cloudcreds_aws.md)
+* [cloudcreds gcp](docs/cloudcreds_gcp.md)
+* [container registry](docs/container_registry.md)
+* [docker profile](docs/docker_profile.md)
 * [edge](docs/edge.md)
 * [project](docs/project.md)
 * [sensor](docs/sensor.md)
@@ -72,8 +73,8 @@ Resource configuration examples are available in the [sample](sample) folder.
 
 * [xiiot_application](sample/application.tf)
 * [xiiot_category](sample/category.tf)
-* [xiiot_cloudcredsaws](sample/cloudcredsaws.tf)
-* [xiiot_cloudcredsgcp](sample/cloudcredsgcp.tf)
+* [xiiot_cloudcreds_aws](sample/cloudcreds_aws.tf)
+* [xiiot_cloudcreds_gcp](sample/cloudcreds_gcp.tf)
 * [xiiot_containerregistry](sample/containerregistry.tf)
 * [xiiot_dockerprofile](sample/dockerprofile.tf)
 * [xiiot_edge](sample/edge.tf)
