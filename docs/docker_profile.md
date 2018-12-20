@@ -1,13 +1,13 @@
 # terraform-provider-xiiot
 
-## Container registry reference
+## Docker profile reference
 
-Terraform resource name : `xiiot_containerregistry`
+Terraform resource name : `xiiot_dockerprofile`
 
 ## Example
 
 ```
-resource "xiiot_containerregistry" "containerregistry" {
+resource "xiiot_dockerprofile" "dockerprofile" {
   name                          = "name"
   description                   = "description"
   type                          = "type"
@@ -16,6 +16,7 @@ resource "xiiot_containerregistry" "containerregistry" {
   email                         = "email"
   pwd                           = "pwd"
   cloud_creds_id                = "${xiiot_cloudcredsgcp.cloudcredsgcp.id}"
+  credentials                   = "credentials"
 }
 ```
 
@@ -26,26 +27,29 @@ resource "xiiot_containerregistry" "containerregistry" {
   * Id of the resource, this is the id for both terraform and Xi IoT.
 * __name__ (_Required_)
   * Type: string
-  * Container registry name.
+  * Docker profile name.
 * __description__ (_Optional_)
   * Type: string
-  * Container registry description.
+  * Docker profile description.
 * __type__ (_Required_)
   * Type: string
   * Allowed value : AWS, GCP, Azure, ContainerRegistry
-  * Container registry type.
+  * Docker profile type.
 * __server__ (_Required_)
   * Type: string
-  * Container registry server.
+  * Docker profile server.
 * __user_name__ (_Optional_)
   * Type: string
-  * Container registry user name (required if type == ContainerRegistry).
+  * Docker profile user name (required if type == ContainerRegistry).
 * __email__ (_Optional_)
   * Type: string
-  * Container registry email (required if type == ContainerRegistry).
+  * Docker profile email (required if type == ContainerRegistry).
 * __pwd__ (_Optional_)
   * Type: string
-  * Container registry password (required if type == ContainerRegistry).
+  * Docker profile password (required if type == ContainerRegistry).
 * __cloud_creds_id__ (_Optional_)
   * Type: string
-  * The cloud creds to import container registry profile from (required if type == AWS || Type == GCP).
+  * The cloud creds to import docker profile profile from (required if type == AWS || Type == GCP).
+* __credentials__ (_Optional_)
+  * Type: string
+  * Credentials of the docker profile.
