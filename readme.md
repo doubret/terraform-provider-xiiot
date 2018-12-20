@@ -43,10 +43,10 @@ swagger generate client -f https://iot.nutanix.com/swagger.json -A xiClient
 
 ## Usage
 
-1. Install terraform as explained [here](https://learn.hashicorp.com/terraform/getting-started/install)
-2. Build the provider from sources and copy it in the terraform plugins folder as explained [here](https://www.terraform.io/docs/plugins/basics.html).
-3. Configure credentials as explained [here](docs/provider.tf).
-4. Run `terraform init` once, then use terraform as usual (`terraform plan`, `terraform apply`, etc...)
+1. Install terraform. ([link](https://learn.hashicorp.com/terraform/getting-started/install))
+2. Build the provider from sources and copy it in the terraform plugins folder. ([here](https://www.terraform.io/docs/plugins/basics.html))
+3. Configure credentials. ([link](docs/provider.md))
+4. Run `terraform init` once, then use terraform as usual (`terraform plan`, `terraform apply`, etc...).
 
 ## Reference documentation
 
