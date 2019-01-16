@@ -31,11 +31,23 @@ func XiIoTApplication() *schema.Resource {
 			"project_id": &schema.Schema{
 				Type:     schema.TypeString,
 				Required: true,
+				DiffSuppressFunc: func(k, old, new string, d *schema.ResourceData) bool {
+					if strings.ToLower(old) == strings.ToLower(new) {
+						return true 
+					}
+					return false
+				},
 			},
 			"edge_ids": &schema.Schema{
 				Type: schema.TypeSet,
 				Elem: &schema.Schema{
 					Type: schema.TypeString,
+					DiffSuppressFunc: func(k, old, new string, d *schema.ResourceData) bool {
+						if strings.ToLower(old) == strings.ToLower(new) {
+							return true 
+						}
+						return false
+					},
 				},
 				Optional: true,
 			},
@@ -46,6 +58,12 @@ func XiIoTApplication() *schema.Resource {
 						"id": {
 							Type:     schema.TypeString,
 							Required: true,
+							DiffSuppressFunc: func(k, old, new string, d *schema.ResourceData) bool {
+								if strings.ToLower(old) == strings.ToLower(new) {
+									return true 
+								}
+								return false
+							},
 						},
 						"value": {
 							Type:     schema.TypeString,
