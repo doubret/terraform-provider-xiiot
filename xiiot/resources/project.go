@@ -155,7 +155,7 @@ func readProject(d *schema.ResourceData, meta interface{}) error {
 func updateProject(d *schema.ResourceData, meta interface{}) error {
 	config := meta.(configuration.Configuration)
 
-	_, err := config.Client.Operations.ProjectUpdateV2(api_operations.NewProjectUpdateV2Params().WithProjectID(d.Id()).WithDoc(getProject(d)), config.Auth)
+	_, err := config.Client.Operations.ProjectUpdateV2(api_operations.NewProjectUpdateV2Params().WithID(d.Id()).WithDoc(getProject(d)), config.Auth)
 
 	if err != nil {
 		return err

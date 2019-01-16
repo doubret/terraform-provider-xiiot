@@ -131,7 +131,7 @@ func readEdge(d *schema.ResourceData, meta interface{}) error {
 func updateEdge(d *schema.ResourceData, meta interface{}) error {
 	config := meta.(configuration.Configuration)
 
-	_, err := config.Client.Operations.EdgeUpdateV2(api_operations.NewEdgeUpdateV2Params().WithEdgeID(d.Id()).WithBody(getEdge(d)), config.Auth)
+	_, err := config.Client.Operations.EdgeUpdateV2(api_operations.NewEdgeUpdateV2Params().WithID(d.Id()).WithBody(getEdge(d)), config.Auth)
 
 	if err != nil {
 		return err
