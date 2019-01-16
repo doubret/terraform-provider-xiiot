@@ -136,6 +136,14 @@ func readProject(d *schema.ResourceData, meta interface{}) error {
 	resource, err := config.Client.Operations.ProjectGet(api_operations.NewProjectGetParams().WithProjectID(d.Id()), config.Auth)
 
 	if err != nil {
+		if httperr, ok := err.(*api_operations.CategoryGetDefault); ok {
+			if httperr.Code() == 404 {
+				d.SetId("")
+
+				return nil
+			}
+		}
+
 		return err
 	}
 
