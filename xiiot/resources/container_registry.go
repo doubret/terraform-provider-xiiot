@@ -83,7 +83,7 @@ func setContainerRegistry(d *schema.ResourceData, resource *api_models.Container
 	d.Set("server", resource.Server)
 	d.Set("user_name", resource.UserName)
 	d.Set("email", resource.Email)
-	d.Set("pwd", "")
+	d.Set("pwd", resource.Pwd)
 	d.Set("cloud_creds_id", resource.CloudCredsID)
 }
 
@@ -107,7 +107,7 @@ func readContainerRegistry(d *schema.ResourceData, meta interface{}) error {
 	resource, err := config.Client.Operations.ContainerRegistryGet(api_operations.NewContainerRegistryGetParams().WithID(d.Id()), config.Auth)
 
 	if err != nil {
-		if httperr, ok := err.(*api_operations.CloudCredsGetDefault); ok {
+		if httperr, ok := err.(*api_operations.ContainerRegistryGetDefault); ok {
 			if httperr.Code() == 404 {
 				d.SetId("")
 
