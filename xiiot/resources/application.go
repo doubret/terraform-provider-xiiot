@@ -107,6 +107,14 @@ func readApplication(d *schema.ResourceData, meta interface{}) error {
 	resource, err := config.Client.Operations.ApplicationGet(api_operations.NewApplicationGetParams().WithID(d.Id()), config.Auth)
 
 	if err != nil {
+		if httperr, ok := err.(*api_operations.ApplicationGetDefault); ok {
+			if httperr.Code() == 404 {
+				d.SetId("")
+
+				return nil
+			}
+		}
+
 		return err
 	}
 
