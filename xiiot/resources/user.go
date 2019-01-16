@@ -79,6 +79,14 @@ func readUser(d *schema.ResourceData, meta interface{}) error {
 	resource, err := config.Client.Operations.UserGet(api_operations.NewUserGetParams().WithID(d.Id()), config.Auth)
 
 	if err != nil {
+		if httperr, ok := err.(*api_operations.UserGetDefault); ok {
+			if httperr.Code() == 404 {
+				d.SetId("")
+
+				return nil
+			}
+		}
+
 		return err
 	}
 

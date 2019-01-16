@@ -139,6 +139,14 @@ func readCloudCredsGcp(d *schema.ResourceData, meta interface{}) error {
 	model, err := config.Client.Operations.CloudCredsGet(api_operations.NewCloudCredsGetParams().WithID(d.Id()), config.Auth)
 
 	if err != nil {
+		if httperr, ok := err.(*api_operations.CloudCredsGetDefault); ok {
+			if httperr.Code() == 404 {
+				d.SetId("")
+
+				return nil
+			}
+		}
+
 		return err
 	}
 
