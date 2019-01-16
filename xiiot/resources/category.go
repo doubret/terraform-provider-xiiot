@@ -94,7 +94,7 @@ func readCategory(d *schema.ResourceData, meta interface{}) error {
 func updateCategory(d *schema.ResourceData, meta interface{}) error {
 	config := meta.(configuration.Configuration)
 
-	_, err := config.Client.Operations.CategoryUpdateV2(api_operations.NewCategoryUpdateV2Params().WithBody(getCategory(d)), config.Auth)
+	_, err := config.Client.Operations.CategoryUpdateV2(api_operations.NewCategoryUpdateV2Params().WithID(d.Id()).WithBody(getCategory(d)), config.Auth)
 
 	if err != nil {
 		return err

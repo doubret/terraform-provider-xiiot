@@ -84,7 +84,7 @@ func readSensor(d *schema.ResourceData, meta interface{}) error {
 func updateSensor(d *schema.ResourceData, meta interface{}) error {
 	config := meta.(configuration.Configuration)
 
-	_, err := config.Client.Operations.SensorUpdateV2(api_operations.NewSensorUpdateV2Params().WithBody(getSensor(d)), config.Auth)
+	_, err := config.Client.Operations.SensorUpdateV2(api_operations.NewSensorUpdateV2Params().WithID(d.Id()).WithBody(getSensor(d)), config.Auth)
 
 	if err != nil {
 		return err

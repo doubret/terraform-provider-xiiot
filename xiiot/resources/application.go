@@ -126,7 +126,7 @@ func readApplication(d *schema.ResourceData, meta interface{}) error {
 func updateApplication(d *schema.ResourceData, meta interface{}) error {
 	config := meta.(configuration.Configuration)
 
-	_, err := config.Client.Operations.ApplicationUpdateV2(api_operations.NewApplicationUpdateV2Params().WithBody(getApplication(d)), config.Auth)
+	_, err := config.Client.Operations.ApplicationUpdateV2(api_operations.NewApplicationUpdateV2Params().WithID(d.Id()).WithBody(getApplication(d)), config.Auth)
 
 	if err != nil {
 		return err

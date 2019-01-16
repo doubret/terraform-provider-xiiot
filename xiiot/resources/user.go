@@ -90,7 +90,7 @@ func readUser(d *schema.ResourceData, meta interface{}) error {
 func updateUser(d *schema.ResourceData, meta interface{}) error {
 	config := meta.(configuration.Configuration)
 
-	_, err := config.Client.Operations.UserUpdateV2(api_operations.NewUserUpdateV2Params().WithBody(getUser(d)), config.Auth)
+	_, err := config.Client.Operations.UserUpdateV2(api_operations.NewUserUpdateV2Params().WithID(d.Id()).WithBody(getUser(d)), config.Auth)
 
 	if err != nil {
 		return err

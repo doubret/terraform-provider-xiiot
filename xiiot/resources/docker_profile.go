@@ -125,7 +125,7 @@ func readDockerProfile(d *schema.ResourceData, meta interface{}) error {
 func updateDockerProfile(d *schema.ResourceData, meta interface{}) error {
 	config := meta.(configuration.Configuration)
 
-	_, err := config.Client.Operations.DockerProfileUpdateV2(api_operations.NewDockerProfileUpdateV2Params().WithBody(getDockerProfile(d)), config.Auth)
+	_, err := config.Client.Operations.DockerProfileUpdateV2(api_operations.NewDockerProfileUpdateV2Params().WithID(d.Id()).WithBody(getDockerProfile(d)), config.Auth)
 
 	if err != nil {
 		return err

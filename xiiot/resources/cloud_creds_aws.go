@@ -94,7 +94,7 @@ func readCloudCredsAws(d *schema.ResourceData, meta interface{}) error {
 func updateCloudCredsAws(d *schema.ResourceData, meta interface{}) error {
 	config := meta.(configuration.Configuration)
 
-	_, err := config.Client.Operations.CloudCredsUpdateV2(api_operations.NewCloudCredsUpdateV2Params().WithBody(getCloudCredsAws(d)), config.Auth)
+	_, err := config.Client.Operations.CloudCredsUpdateV2(api_operations.NewCloudCredsUpdateV2Params().WithID(d.Id()).WithBody(getCloudCredsAws(d)), config.Auth)
 
 	if err != nil {
 		return err
