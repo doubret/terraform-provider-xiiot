@@ -118,7 +118,7 @@ func readContainerRegistry(d *schema.ResourceData, meta interface{}) error {
 func updateContainerRegistry(d *schema.ResourceData, meta interface{}) error {
 	config := meta.(configuration.Configuration)
 
-	_, err := config.Client.Operations.ContainerRegistryUpdate(api_operations.NewContainerRegistryUpdateParams().WithBody(getContainerRegistry(d)), config.Auth)
+	_, err := config.Client.Operations.ContainerRegistryUpdate(api_operations.NewContainerRegistryUpdateParams().WithID(d.Id()).WithBody(getContainerRegistry(d)), config.Auth)
 
 	if err != nil {
 		return err
