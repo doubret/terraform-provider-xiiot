@@ -12,7 +12,7 @@ func XiIoTContainerRegistry() *schema.Resource {
 		SchemaVersion: 1,
 		Create:        createContainerRegistry,
 		Read:          readContainerRegistry,
-		Update:        updateContainerRegistry,
+		// Update:        updateContainerRegistry,
 		Delete:        deleteContainerRegistry,
 		Schema: map[string]*schema.Schema{
 			"name": &schema.Schema{
@@ -83,7 +83,7 @@ func setContainerRegistry(d *schema.ResourceData, resource *api_models.Container
 	d.Set("server", resource.Server)
 	d.Set("user_name", resource.UserName)
 	d.Set("email", resource.Email)
-	d.Set("pwd", resource.Pwd)
+	d.Set("pwd", "")
 	d.Set("cloud_creds_id", resource.CloudCredsID)
 }
 
@@ -115,17 +115,17 @@ func readContainerRegistry(d *schema.ResourceData, meta interface{}) error {
 	return nil
 }
 
-func updateContainerRegistry(d *schema.ResourceData, meta interface{}) error {
-	config := meta.(configuration.Configuration)
+// func updateContainerRegistry(d *schema.ResourceData, meta interface{}) error {
+// 	config := meta.(configuration.Configuration)
 
-	_, err := config.Client.Operations.ContainerRegistryUpdate(api_operations.NewContainerRegistryUpdateParams().WithID(d.Id()).WithBody(getContainerRegistry(d)), config.Auth)
+// 	_, err := config.Client.Operations.ContainerRegistryUpdate(api_operations.NewContainerRegistryUpdateParams().WithID(d.Id()).WithBody(getContainerRegistry(d)), config.Auth)
 
-	if err != nil {
-		return err
-	}
+// 	if err != nil {
+// 		return err
+// 	}
 
-	return readContainerRegistry(d, meta)
-}
+// 	return readContainerRegistry(d, meta)
+// }
 
 func deleteContainerRegistry(d *schema.ResourceData, meta interface{}) error {
 	config := meta.(configuration.Configuration)
