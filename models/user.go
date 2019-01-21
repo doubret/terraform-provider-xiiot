@@ -40,6 +40,8 @@ type User struct {
 	// User role.
 	// Enum: [INFRA_ADMIN USER]
 	Role string `json:"role,omitempty"`
+
+	TenantID *string `json:"tenantId"`
 }
 
 // Validate validates this user
