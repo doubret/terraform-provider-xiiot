@@ -6,7 +6,6 @@ import (
 	"github.com/doubret/terraform-provider-xiiot/xiiot/configuration"
 	"github.com/doubret/terraform-provider-xiiot/xiiot/utils"
 	"github.com/hashicorp/terraform/helper/schema"
-	"strings"
 )
 
 func XiIoTApplication() *schema.Resource {
