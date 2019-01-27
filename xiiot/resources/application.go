@@ -30,14 +30,14 @@ func XiIoTApplication() *schema.Resource {
 				Required: true,
 			},
 			"project_id": &schema.Schema{
-				Type:     schema.TypeString,
-				Required: true,
+				Type:             schema.TypeString,
+				Required:         true,
 				DiffSuppressFunc: utils.Compare_ids,
 			},
 			"edge_ids": &schema.Schema{
 				Type: schema.TypeSet,
 				Elem: &schema.Schema{
-					Type: schema.TypeString,
+					Type:             schema.TypeString,
 					DiffSuppressFunc: utils.Compare_ids,
 				},
 				Optional: true,
@@ -47,8 +47,8 @@ func XiIoTApplication() *schema.Resource {
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"id": {
-							Type:     schema.TypeString,
-							Required: true,
+							Type:             schema.TypeString,
+							Required:         true,
 							DiffSuppressFunc: utils.Compare_ids,
 						},
 						"value": {

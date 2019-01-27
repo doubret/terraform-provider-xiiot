@@ -119,7 +119,7 @@ func readEdge(d *schema.ResourceData, meta interface{}) error {
 				return nil
 			}
 		}
-		
+
 		return err
 	}
 

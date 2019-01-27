@@ -16,8 +16,9 @@ func XiIoTSensor() *schema.Resource {
 		Delete:        deleteSensor,
 		Schema: map[string]*schema.Schema{
 			"edge_id": &schema.Schema{
-				Type:     schema.TypeString,
-				Required: true,
+				Type:             schema.TypeString,
+				Required:         true,
+				DiffSuppressFunc: utils.Compare_ids,
 			},
 			"topic_name": &schema.Schema{
 				Type:     schema.TypeString,

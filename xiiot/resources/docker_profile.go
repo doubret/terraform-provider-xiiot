@@ -4,6 +4,7 @@ import (
 	api_operations "github.com/doubret/terraform-provider-xiiot/client/operations"
 	api_models "github.com/doubret/terraform-provider-xiiot/models"
 	"github.com/doubret/terraform-provider-xiiot/xiiot/configuration"
+	"github.com/doubret/terraform-provider-xiiot/xiiot/utils"
 	"github.com/hashicorp/terraform/helper/schema"
 )
 
@@ -44,8 +45,9 @@ func XiIoTDockerProfile() *schema.Resource {
 				Optional: true,
 			},
 			"cloud_creds_id": &schema.Schema{
-				Type:     schema.TypeString,
-				Optional: true,
+				Type:             schema.TypeString,
+				Optional:         true,
+				DiffSuppressFunc: utils.Compare_ids,
 			},
 			"credentials": &schema.Schema{
 				Type:     schema.TypeString,

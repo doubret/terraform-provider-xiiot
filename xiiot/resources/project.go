@@ -27,14 +27,16 @@ func XiIoTProject() *schema.Resource {
 			"cloud_credential_ids": &schema.Schema{
 				Type: schema.TypeSet,
 				Elem: &schema.Schema{
-					Type: schema.TypeString,
+					Type:             schema.TypeString,
+					DiffSuppressFunc: utils.Compare_ids,
 				},
 				Required: true,
 			},
 			"docker_profile_ids": &schema.Schema{
 				Type: schema.TypeSet,
 				Elem: &schema.Schema{
-					Type: schema.TypeString,
+					Type:             schema.TypeString,
+					DiffSuppressFunc: utils.Compare_ids,
 				},
 				Required: true,
 			},
@@ -43,8 +45,9 @@ func XiIoTProject() *schema.Resource {
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"user_id": {
-							Type:     schema.TypeString,
-							Required: true,
+							Type:             schema.TypeString,
+							Required:         true,
+							DiffSuppressFunc: utils.Compare_ids,
 						},
 						"role": {
 							Type:     schema.TypeString,
@@ -61,7 +64,8 @@ func XiIoTProject() *schema.Resource {
 			"edge_ids": &schema.Schema{
 				Type: schema.TypeSet,
 				Elem: &schema.Schema{
-					Type: schema.TypeString,
+					Type:             schema.TypeString,
+					DiffSuppressFunc: utils.Compare_ids,
 				},
 				Optional: true,
 			},
@@ -70,8 +74,9 @@ func XiIoTProject() *schema.Resource {
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"id": {
-							Type:     schema.TypeString,
-							Required: true,
+							Type:             schema.TypeString,
+							Required:         true,
+							DiffSuppressFunc: utils.Compare_ids,
 						},
 						"value": {
 							Type:     schema.TypeString,
