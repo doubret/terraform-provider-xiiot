@@ -63,7 +63,6 @@ func getUser(d *schema.ResourceData) *api_models.User {
 func setUser(d *schema.ResourceData, resource *api_models.User) {
 	d.Set("name", resource.Name)
 	d.Set("email", resource.Email)
-	// d.Set("password", resource.Password)
 	d.Set("tenant_id", resource.TenantID)
 	d.Set("role", resource.Role)
 }

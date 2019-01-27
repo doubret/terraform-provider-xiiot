@@ -87,7 +87,6 @@ func setContainerRegistry(d *schema.ResourceData, resource *api_models.Container
 	d.Set("server", resource.Server)
 	d.Set("user_name", resource.UserName)
 	d.Set("email", resource.Email)
-	d.Set("pwd", resource.Pwd)
 	d.Set("cloud_creds_id", resource.CloudCredsID)
 }
 
