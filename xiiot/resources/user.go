@@ -24,8 +24,9 @@ func XiIoTUser() *schema.Resource {
 				Required: true,
 			},
 			"password": &schema.Schema{
-				Type:     schema.TypeString,
-				Required: true,
+				Type:      schema.TypeString,
+				Required:  true,
+				StateFunc: utils.Hash,
 			},
 			"tenant_id": &schema.Schema{
 				Type:     schema.TypeString,
@@ -61,7 +62,7 @@ func getUser(d *schema.ResourceData) *api_models.User {
 func setUser(d *schema.ResourceData, resource *api_models.User) {
 	d.Set("name", resource.Name)
 	d.Set("email", resource.Email)
-	d.Set("password", resource.Password)
+	// d.Set("password", resource.Password)
 	d.Set("tenant_id", resource.TenantID)
 	d.Set("role", resource.Role)
 }
