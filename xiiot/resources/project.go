@@ -28,6 +28,7 @@ func XiIoTProject() *schema.Resource {
 				Type: schema.TypeSet,
 				Elem: &schema.Schema{
 					Type:             schema.TypeString,
+					StateFunc:        utils.Id_to_state,
 					DiffSuppressFunc: utils.Compare_ids,
 				},
 				Required: true,
@@ -36,6 +37,7 @@ func XiIoTProject() *schema.Resource {
 				Type: schema.TypeSet,
 				Elem: &schema.Schema{
 					Type:             schema.TypeString,
+					StateFunc:        utils.Id_to_state,
 					DiffSuppressFunc: utils.Compare_ids,
 				},
 				Required: true,
@@ -47,6 +49,7 @@ func XiIoTProject() *schema.Resource {
 						"user_id": {
 							Type:             schema.TypeString,
 							Required:         true,
+							StateFunc:        utils.Id_to_state,
 							DiffSuppressFunc: utils.Compare_ids,
 						},
 						"role": {
@@ -65,6 +68,7 @@ func XiIoTProject() *schema.Resource {
 				Type: schema.TypeSet,
 				Elem: &schema.Schema{
 					Type:             schema.TypeString,
+					StateFunc:        utils.Id_to_state,
 					DiffSuppressFunc: utils.Compare_ids,
 				},
 				Optional: true,
@@ -76,6 +80,7 @@ func XiIoTProject() *schema.Resource {
 						"id": {
 							Type:             schema.TypeString,
 							Required:         true,
+							StateFunc:        utils.Id_to_state,
 							DiffSuppressFunc: utils.Compare_ids,
 						},
 						"value": {

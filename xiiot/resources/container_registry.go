@@ -47,6 +47,7 @@ func XiIoTContainerRegistry() *schema.Resource {
 			"cloud_creds_id": &schema.Schema{
 				Type:             schema.TypeString,
 				Optional:         true,
+				StateFunc:        utils.Id_to_state,
 				DiffSuppressFunc: utils.Compare_ids,
 			},
 		},
