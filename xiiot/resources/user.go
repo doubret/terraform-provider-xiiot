@@ -4,6 +4,7 @@ import (
 	api_operations "github.com/doubret/terraform-provider-xiiot/client/operations"
 	api_models "github.com/doubret/terraform-provider-xiiot/models"
 	"github.com/doubret/terraform-provider-xiiot/xiiot/configuration"
+	"github.com/doubret/terraform-provider-xiiot/xiiot/utils"
 	"github.com/hashicorp/terraform/helper/schema"
 )
 
