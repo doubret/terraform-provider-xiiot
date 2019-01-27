@@ -41,8 +41,9 @@ func XiIoTContainerRegistry() *schema.Resource {
 				Optional: true,
 			},
 			"pwd": &schema.Schema{
-				Type:     schema.TypeString,
-				Optional: true,
+				Type:      schema.TypeString,
+				Optional:  true,
+				StateFunc: utils.Hash,
 			},
 			"cloud_creds_id": &schema.Schema{
 				Type:             schema.TypeString,
